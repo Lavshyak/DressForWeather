@@ -1,4 +1,5 @@
 using DressForWeather.Models;
+using DressForWeather.Models.EFCoreModels;
 
 namespace DressForWeather.WebAPI;
 
