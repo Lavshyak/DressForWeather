@@ -1,4 +1,4 @@
-namespace WeatherDress.WebAPI;
+namespace DressForWeather.WebAPI;
 
 public class WeatherForecast
 {

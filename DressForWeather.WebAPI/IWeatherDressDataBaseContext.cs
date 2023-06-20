@@ -1,6 +1,6 @@
 using DressForWeather.Models;
 
-namespace WeatherDress.WebAPI;
+namespace DressForWeather.WebAPI;
 
 public interface IWeatherDressDataBaseContext
 {
