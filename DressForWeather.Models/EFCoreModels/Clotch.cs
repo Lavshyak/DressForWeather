@@ -10,5 +10,5 @@ public class Clotch
 	
 	public required string Name { get; set; }
 	
-	public List<Pair<string, string>> ClotchParameters { get; set; } = new();
+	public required List<ClotchParameterPair> ClotchParameters { get; set; } = new();
 }
