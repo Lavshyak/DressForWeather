@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DressForWeather.WebAPI.Controllers;
 
+// TODO: дописать контроллер, написать недостающие контроллеры
 [ApiController]
 [Route("[controller]")]
 public class DressReportController : ControllerBase
