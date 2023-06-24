@@ -1,7 +1,9 @@
 namespace DressForWeather.Models;
 
+
 public class Info
 {
+
 	public long Id { get; set; }
 	public DateTime DateTime { get; set; }
 	public Half Temperature { get; set; }

@@ -1,4 +1,4 @@
-namespace DressForWeather.Models;
+      namespace DressForWeather.Models;
 
 public class Clotch
 {
