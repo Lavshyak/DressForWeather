@@ -1,7 +1,7 @@
 using DressForWeather.Models.EFCoreModels;
 using Microsoft.EntityFrameworkCore;
 
-namespace DressForWeather.DbContextTemplates;
+namespace DressForWeather.DbContexts;
 
 public interface IWeatherDressDbContext
 {

@@ -5,6 +5,7 @@ namespace DressForWeather.Models.EFCoreModels;
 /// <summary>
 /// не использовать
 /// </summary>
+[Obsolete("Do not use.")]
 public class Info
 {
 	public long Id { get; set; }

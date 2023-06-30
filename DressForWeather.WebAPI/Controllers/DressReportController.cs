@@ -1,5 +1,6 @@
-using DressForWeather.DbContextTemplates;
+using DressForWeather.DbContexts;
 using DressForWeather.Models.EFCoreModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +9,7 @@ namespace DressForWeather.WebAPI.Controllers;
 // TODO: дописать контроллер, написать недостающие контроллеры
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public class DressReportController : ControllerBase
 {
 	private readonly ILogger<DressReportController> _logger;
@@ -18,6 +20,7 @@ public class DressReportController : ControllerBase
 		_weatherDressDbContext = weatherDressDbContext;
 	}
 
+	
 	[HttpGet(Name = "GetDressReportById")]
 	public async Task<DressReport?> Get(long id)
 	{

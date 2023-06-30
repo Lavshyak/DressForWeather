@@ -4,9 +4,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DressForWeather.Models", "D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DressForWeather.WebAPI", "DressForWeather.WebAPI\DressForWeather.WebAPI.csproj", "{66C3E051-8C80-47CE-8A01-F2914D4A2B5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DressForWeather.DbContextTemplates", "DressForWeather.DbContextTemplates\DressForWeather.DbContextTemplates.csproj", "{20ADF309-532F-4A4B-A4CF-0037FBE4CF4C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DressForWeather.DbContextPostgre", "DressForWeather.DbContextPostgre\DressForWeather.DbContextPostgre.csproj", "{17DFFD5E-83AC-4827-877D-AFBC5DDC7FF6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DressForWeather.DbContexts", "DressForWeather.DbContexts\DressForWeather.DbContexts.csproj", "{20ADF309-532F-4A4B-A4CF-0037FBE4CF4C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,9 +24,5 @@ Global
 		{20ADF309-532F-4A4B-A4CF-0037FBE4CF4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20ADF309-532F-4A4B-A4CF-0037FBE4CF4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20ADF309-532F-4A4B-A4CF-0037FBE4CF4C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{17DFFD5E-83AC-4827-877D-AFBC5DDC7FF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{17DFFD5E-83AC-4827-877D-AFBC5DDC7FF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{17DFFD5E-83AC-4827-877D-AFBC5DDC7FF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{17DFFD5E-83AC-4827-877D-AFBC5DDC7FF6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
