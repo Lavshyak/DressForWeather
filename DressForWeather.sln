@@ -6,6 +6,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DressForWeather.WebAPI", "D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DressForWeather.DbContexts", "DressForWeather.DbContexts\DressForWeather.DbContexts.csproj", "{20ADF309-532F-4A4B-A4CF-0037FBE4CF4C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTestClient", "ConsoleTestClient\ConsoleTestClient.csproj", "{F5FC09E3-59FD-4ED6-92D7-DC4C50603E51}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DressForWeather.EFCoreModels", "DressForWeather.EFCoreModels\DressForWeather.EFCoreModels.csproj", "{AC603D00-8467-49F3-AD6A-0AB344744083}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DressForWeather.SharedModels", "DressForWeather.SharedModels\DressForWeather.SharedModels.csproj", "{6B2D514C-E735-436A-A1B2-EE0718E45C0D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +30,17 @@ Global
 		{20ADF309-532F-4A4B-A4CF-0037FBE4CF4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20ADF309-532F-4A4B-A4CF-0037FBE4CF4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20ADF309-532F-4A4B-A4CF-0037FBE4CF4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5FC09E3-59FD-4ED6-92D7-DC4C50603E51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5FC09E3-59FD-4ED6-92D7-DC4C50603E51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5FC09E3-59FD-4ED6-92D7-DC4C50603E51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5FC09E3-59FD-4ED6-92D7-DC4C50603E51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC603D00-8467-49F3-AD6A-0AB344744083}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC603D00-8467-49F3-AD6A-0AB344744083}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC603D00-8467-49F3-AD6A-0AB344744083}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC603D00-8467-49F3-AD6A-0AB344744083}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B2D514C-E735-436A-A1B2-EE0718E45C0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B2D514C-E735-436A-A1B2-EE0718E45C0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B2D514C-E735-436A-A1B2-EE0718E45C0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B2D514C-E735-436A-A1B2-EE0718E45C0D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

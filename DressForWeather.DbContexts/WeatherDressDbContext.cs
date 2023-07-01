@@ -24,7 +24,10 @@ public class WeatherDressDbContext : IdentityDbContext<User, IdentityRole<long>,
 	public DbSet<ClothType> ClothTypes { get;  } = default!;
 	public DbSet<DressReport> DressReports { get;  } = default!;
 	
-	
-	
 	public DbSet<WeatherState> WeatherStates { get;  } = default!;
+
+	public WeatherDressDbContext(DbContextOptions<WeatherDressDbContext> options) : base(options)
+	{
+		
+	}
 }

@@ -19,7 +19,7 @@ public class AuthorizeController : ControllerBase
 		_signInManager = signInManager;
 	}
 
-	[HttpPost]
+	[HttpPost(nameof(Login))]
 	public async Task<IActionResult> Login(LoginParameters parameters)
 	{
 		var user = await _userManager.FindByNameAsync(parameters.UserName);
@@ -33,14 +33,17 @@ public class AuthorizeController : ControllerBase
 	}
 
 
-	[HttpPost]
+	[HttpPost(nameof(Register))]
 	public async Task<IActionResult> Register(RegisterParameters parameters)
 	{
 		var user = new User
 		{
 			UserName = parameters.UserName
 		};
-		var result = await _userManager.CreateAsync(user, parameters.Password);
+		
+		//line below throws exception: relation "AspNetUsers" does not exist.
+		// TODO: исправить ошибку. в интернете советуют миграции добавить особым образом.
+		var result = await _userManager.CreateAsync(user, parameters.Password); 
 		if (!result.Succeeded) return BadRequest(result.Errors.FirstOrDefault()?.Description);
 
 		return await Login(new LoginParameters
@@ -51,14 +54,14 @@ public class AuthorizeController : ControllerBase
 	}
 
 	[Authorize]
-	[HttpPost]
+	[HttpPost(nameof(Logout))]
 	public async Task<IActionResult> Logout()
 	{
 		await _signInManager.SignOutAsync();
 		return Ok();
 	}
 
-	[HttpGet]
+	[HttpGet(nameof(UserInfo))]
 	public UserInfo UserInfo()
 	{
 		//var user = await _userManager.GetUserAsync(HttpContext.User);

@@ -16,6 +16,7 @@
     <ItemGroup>
       <ProjectReference Include="..\DressForWeather.DbContexts\DressForWeather.DbContexts.csproj" />
       <ProjectReference Include="..\DressForWeather.Models\DressForWeather.Models.csproj" />
+      <ProjectReference Include="..\DressForWeather.SharedModels\DressForWeather.SharedModels.csproj" />
     </ItemGroup>
 
 </Project>

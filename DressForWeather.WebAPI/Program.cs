@@ -8,7 +8,7 @@ namespace DressForWeather.WebAPI;
 
 internal static class Program
 {
-	static void Main(string[] args)
+	private static void Main(string[] args)
 	{
 		var builder = WebApplication.CreateBuilder(args);
 		builder.ConfigureServices();
@@ -17,7 +17,7 @@ internal static class Program
 		app.Run();
 	}
 
-	static void ConfigureServices(this WebApplicationBuilder builder)
+	private static void ConfigureServices(this WebApplicationBuilder builder)
 	{
 		// Add services to the container.
 
@@ -32,7 +32,7 @@ internal static class Program
 				switch
 				{
 					"PostgreSql" => options.UseNpgsql(
-						builder.Configuration.GetConnectionString("PostgreSqlConnection"),
+						builder.Configuration.GetConnectionString("PostgreSqlDressForWeather"),
 						x => x.MigrationsAssembly("PostgreSqlMigrations")),
 			
 					_ => throw new Exception($"Unsupported provider: {dbProvider}")
@@ -45,9 +45,9 @@ internal static class Program
 			.AddCookie();
 		builder.Services.AddAuthorization();
 
-		builder.Services.AddManualIdentity();
+		builder.Services.AddManualAuthorization();
 	}
-	static void AddManualIdentity(this IServiceCollection services)
+	private static void AddManualAuthorization(this IServiceCollection services)
 	{
 		services.AddIdentity<User, IdentityRole<long>>()
 			.AddEntityFrameworkStores<WeatherDressDbContext>()
@@ -56,10 +56,10 @@ internal static class Program
 		services.Configure<IdentityOptions>(options =>
 		{
 			// Password settings
-			options.Password.RequireDigit = true;
-			options.Password.RequiredLength = 6;
-			options.Password.RequireNonAlphanumeric = true;
-			options.Password.RequireUppercase = true;
+			options.Password.RequireDigit = false;
+			options.Password.RequiredLength = 4;
+			options.Password.RequireNonAlphanumeric = false;
+			options.Password.RequireUppercase = false;
 			options.Password.RequireLowercase = false;
 
 			// Lockout settings
@@ -81,7 +81,7 @@ internal static class Program
 			};
 		});
 	}
-	static void ConfigureApp(this WebApplication app)
+	private static void ConfigureApp(this WebApplication app)
 	{
 		// Configure the HTTP request pipeline.
 		if (app.Environment.IsDevelopment())
