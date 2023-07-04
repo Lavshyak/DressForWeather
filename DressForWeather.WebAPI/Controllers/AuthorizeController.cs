@@ -79,4 +79,18 @@ public class AuthorizeController : ControllerBase
 				.ToDictionary(c => c.Type, c => c.Value)
 		};
 	}
+	
+	#if DEBUG
+	[HttpPost(nameof(DebugLogiAndGetInfo))]
+	public async Task<IActionResult> DebugLogiAndGetInfo(LoginParameters parameters)
+	{
+		var user = await _userManager.FindByNameAsync(parameters.UserName);
+		if (user == null) return BadRequest("User does not exist");
+		var singInResult = await _signInManager.CheckPasswordSignInAsync(user, parameters.Password, false);
+		if (!singInResult.Succeeded) return BadRequest("Invalid password");
+
+		await _signInManager.SignInAsync(user, parameters.RememberMe);
+		return new JsonResult(BuildUserInfo());
+	}
+	#endif
 }
