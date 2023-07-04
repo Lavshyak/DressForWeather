@@ -1,6 +1,4 @@
-using System.ComponentModel.DataAnnotations;
-
-namespace DressForWeather.Models.EFCoreModels;
+namespace DressForWeather.WebAPI.BackendModels.EFCoreModels;
 
 public class ClotchParameterPair
 {

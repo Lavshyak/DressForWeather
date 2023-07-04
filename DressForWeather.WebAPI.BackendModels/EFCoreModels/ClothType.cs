@@ -1,7 +1,4 @@
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.CompilerServices;
-
-namespace DressForWeather.Models.EFCoreModels;
+namespace DressForWeather.WebAPI.BackendModels.EFCoreModels;
 
 public class ClothType
 {

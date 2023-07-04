@@ -1,5 +1,5 @@
-using BlazorWithIdentity.Shared;
-using DressForWeather.Models.EFCoreModels;
+using DressForWeather.SharedModels;
+using DressForWeather.WebAPI.BackendModels.EFCoreModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -41,8 +41,6 @@ public class AuthorizeController : ControllerBase
 			UserName = parameters.UserName
 		};
 		
-		//line below throws exception: relation "AspNetUsers" does not exist.
-		// TODO: исправить ошибку. в интернете советуют миграции добавить особым образом.
 		var result = await _userManager.CreateAsync(user, parameters.Password); 
 		if (!result.Succeeded) return BadRequest(result.Errors.FirstOrDefault()?.Description);
 

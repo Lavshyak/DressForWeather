@@ -1,6 +1,4 @@
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace DressForWeather.Models.EFCoreModels;
+namespace DressForWeather.WebAPI.BackendModels.EFCoreModels;
 
 /// <summary>
 /// не использовать

@@ -1,5 +1,5 @@
-using DressForWeather.DbContexts;
-using DressForWeather.Models.EFCoreModels;
+using DressForWeather.WebAPI.BackendModels.EFCoreModels;
+using DressForWeather.WebAPI.DbContexts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,18 +13,18 @@ namespace DressForWeather.WebAPI.Controllers;
 public class DressReportController : ControllerBase
 {
 	private readonly ILogger<DressReportController> _logger;
-	private readonly WeatherDressDbContext _weatherDressDbContext;
-	public DressReportController(ILogger<DressReportController> logger, WeatherDressDbContext weatherDressDbContext)
+	private readonly MainDbContext _mainDbContext;
+	public DressReportController(ILogger<DressReportController> logger, MainDbContext mainDbContext)
 	{
 		_logger = logger;
-		_weatherDressDbContext = weatherDressDbContext;
+		_mainDbContext = mainDbContext;
 	}
 
 	
 	[HttpGet(Name = "GetDressReportById")]
 	public async Task<DressReport?> Get(long id)
 	{
-		var report = await _weatherDressDbContext.DressReports.FirstOrDefaultAsync(dr => dr.Id == id);
+		var report = await _mainDbContext.DressReports.FirstOrDefaultAsync(dr => dr.Id == id);
 		return report;
 	}
 }

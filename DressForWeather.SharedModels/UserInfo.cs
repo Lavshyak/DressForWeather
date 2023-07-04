@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BlazorWithIdentity.Shared
+﻿namespace DressForWeather.SharedModels
 {
     public class UserInfo
     {

@@ -1,10 +1,12 @@
-using DressForWeather.Models.EFCoreModels;
+using DressForWeather.WebAPI.BackendModels.EFCoreModels;
 using Microsoft.EntityFrameworkCore;
 
-namespace DressForWeather.DbContexts;
+namespace DressForWeather.WebAPI.DbContexts;
 
-public interface IWeatherDressDbContext
+public interface IMainDbContext
 {
+	public const string DbContextName = "Main";
+	
 	public DbSet<Clotch> Clotches { get; }
 	public DbSet<ClotchParameterPair> ClotchesParameterPairs { get; }
 	public DbSet<ClothesSet> ClothesSets { get; }

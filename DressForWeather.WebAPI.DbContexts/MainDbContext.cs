@@ -1,14 +1,14 @@
-using DressForWeather.Models.EFCoreModels;
+using DressForWeather.WebAPI.BackendModels.EFCoreModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace DressForWeather.DbContexts;
+namespace DressForWeather.WebAPI.DbContexts;
 
-// TODO: сделать миграции поновой. https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/providers?tabs=dotnet-core-cli
-
-public class WeatherDressDbContext : IdentityDbContext<User, IdentityRole<long>, long>, IWeatherDressDbContext
+public class MainDbContext : IdentityDbContext<User, IdentityRole<long>, long>, IMainDbContext
 {
+	public const string ContextName = "Main";
+	
 	/*
 	 public virtual DbSet<(User)TUser> Users { get; set; } = default!; //IdentityDbContext-> IdentityDbContext -> IdentityUserContext.Users
 	 
@@ -26,7 +26,7 @@ public class WeatherDressDbContext : IdentityDbContext<User, IdentityRole<long>,
 	
 	public DbSet<WeatherState> WeatherStates { get;  } = default!;
 
-	public WeatherDressDbContext(DbContextOptions<WeatherDressDbContext> options) : base(options)
+	public MainDbContext(DbContextOptions<MainDbContext> options) : base(options)
 	{
 		
 	}

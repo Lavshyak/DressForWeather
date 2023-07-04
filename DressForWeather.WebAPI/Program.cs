@@ -1,12 +1,12 @@
-using DressForWeather.DbContexts;
-using DressForWeather.Models.EFCoreModels;
+using DressForWeather.WebAPI.BackendModels.EFCoreModels;
+using DressForWeather.WebAPI.DbContexts;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace DressForWeather.WebAPI;
 
-internal static class Program
+internal static partial class Program
 {
 	private static void Main(string[] args)
 	{
@@ -26,20 +26,26 @@ internal static class Program
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddSwaggerGen();
 
-		var dbProvider = builder.Configuration.GetSection("DbProviders").GetValue("WeatherDressContext", "PostgreSql");
-		builder.Services.AddDbContext<WeatherDressDbContext>(
-			options => _ = dbProvider
-				switch
-				{
-					"PostgreSql" => options.UseNpgsql(
-						builder.Configuration.GetConnectionString("PostgreSqlDressForWeather"),
-						x => x.MigrationsAssembly("PostgreSqlMigrations")),
-			
-					_ => throw new Exception($"Unsupported provider: {dbProvider}")
-				}
-		);
+		builder.Services.AddDbContext<MainDbContext>(
+			options =>
+			{
+				var dbProvider = builder.Configuration.GetDbProviderNameFor(MainDbContext.ContextName, DbProviders.Postgre);
+				_ = dbProvider
+					switch
+					{
+						//сделано: dotnet ef migrations add InitialCreate --project ../DressForWeather.WebAPI.PostgreMigrations -- --provider Postgre
+						//потом: dotnet ef database update
+						DbProviders.Postgre => options.UseNpgsql(
+							builder.Configuration.GetConnectionStringForDbContext(dbProvider, MainDbContext.ContextName),
+							x => x.MigrationsAssembly(GetMigrationsAssemblyNameFor(dbProvider))),
+						
+						//если перейдем на другую базу данных, то нужно сделать действия, аналогичные строке выше
 
-		builder.Services.AddScoped<WeatherDressDbContext>();
+						_ => throw new Exception($"Unsupported provider: {dbProvider}")
+					};
+			});
+
+		builder.Services.AddScoped<MainDbContext>();
 
 		builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 			.AddCookie();
@@ -47,10 +53,11 @@ internal static class Program
 
 		builder.Services.AddManualAuthorization();
 	}
+
 	private static void AddManualAuthorization(this IServiceCollection services)
 	{
 		services.AddIdentity<User, IdentityRole<long>>()
-			.AddEntityFrameworkStores<WeatherDressDbContext>()
+			.AddEntityFrameworkStores<MainDbContext>()
 			.AddDefaultTokenProviders();
 
 		services.Configure<IdentityOptions>(options =>
@@ -70,7 +77,7 @@ internal static class Program
 			// User settings
 			options.User.RequireUniqueEmail = false;
 		});
-		
+
 		services.ConfigureApplicationCookie(options =>
 		{
 			options.Cookie.HttpOnly = true;
@@ -81,6 +88,7 @@ internal static class Program
 			};
 		});
 	}
+
 	private static void ConfigureApp(this WebApplication app)
 	{
 		// Configure the HTTP request pipeline.
@@ -97,5 +105,4 @@ internal static class Program
 
 		app.MapControllers();
 	}
-	
 }

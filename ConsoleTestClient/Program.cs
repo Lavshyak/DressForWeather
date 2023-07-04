@@ -1,5 +1,5 @@
 ﻿using System.Net.Http.Json;
-using BlazorWithIdentity.Shared;
+using DressForWeather.SharedModels;
 
 namespace ConsoleTestClient;
 

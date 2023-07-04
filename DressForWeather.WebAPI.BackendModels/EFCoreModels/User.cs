@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace DressForWeather.Models.EFCoreModels;
+namespace DressForWeather.WebAPI.BackendModels.EFCoreModels;
 
 public class User : IdentityUser<long>
 {
