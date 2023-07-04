@@ -20,9 +20,9 @@ public class DressReportController : ControllerBase
 		_mainDbContext = mainDbContext;
 	}
 
-	
+	[Authorize]
 	[HttpGet(Name = "GetDressReportById")]
-	public async Task<DressReport?> Get(long id)
+	public async Task<DressReport?> GetDressReportById(long id)
 	{
 		var report = await _mainDbContext.DressReports.FirstOrDefaultAsync(dr => dr.Id == id);
 		return report;
