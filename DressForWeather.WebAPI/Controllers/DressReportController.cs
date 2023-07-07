@@ -49,6 +49,6 @@ public class DressReportController : ControllerBase
 			report = DressRepos.Update(model);
 			done = true;
 		}
-		
+		return done ? report : null;
 	}
 }

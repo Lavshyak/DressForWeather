@@ -4,12 +4,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 #nullable disable
 
 namespace DressForWeather.DbContextPostgre.Migrations
-{
-    /// <inheritdoc />
-    public partial class InitialCreate : Migration
-    {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
+{/*
+   protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
                 name: "ClothTypes",
@@ -176,6 +172,11 @@ namespace DressForWeather.DbContextPostgre.Migrations
                 table: "DressReports",
                 column: "WeatherStateId");
         }
+  */
+    /// <inheritdoc />
+    public partial class InitialCreate : Migration
+    {
+        /// <inheritdoc />
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
