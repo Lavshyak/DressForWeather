@@ -1,7 +1,8 @@
-﻿using DressForWeather.DbContextTemplates;
+
 using Microsoft.AspNetCore.Mvc;
-using DressForWeather.Models;
-using DressForWeather.Models.EFCoreModels;
+using DressForWeather.SharedModels;
+using DressForWeather.WebAPI.BackendModels.EFCoreModels;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace DressForWeather.WebAPI.Controllers;
