@@ -12,4 +12,6 @@ public class ClothType
 	// TODO: пользователь может ввести "jacket". должен найтись тот же обьект, который нашелся бы как "куртка".
 	// TODO: надо подумать, как базу данных сделать единой для хотя бы двух языков, не дублируя такие свойства.
 	public required string Name { get; set; }
+
+	public Dictionary<string, string> DictionaryClothType { get; set; }//Решает проблему насчет языков
 }
