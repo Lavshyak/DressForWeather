@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using DressForWeather.SharedModels;
 using DressForWeather.WebAPI.BackendModels.EFCoreModels;
+using DressForWeather.WebAPI.DbContexts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,15 +13,14 @@ namespace DressForWeather.WebAPI.Controllers;
 public class ClotchController : Controller
 {
     private readonly ILogger<ClotchController> _logger;
-    private readonly WeatherDressDbContext _dbContext;
+    private readonly MainDbContext _dbContext;
 
-    public ClotchController(ILogger<ClotchController> logger, WeatherDressDbContext db) 
+    public ClotchController(ILogger<ClotchController> logger, MainDbContext db) 
     {
         _logger = logger;
         _dbContext = db;
     }
-    [HttpPost]
-    public async Task<Clotch> CreateClotch
+
     [HttpGet]
     public async Task<Clotch?> GetClotchById(long id) 
     {

@@ -11,22 +11,26 @@ namespace DressForWeather.WebAPI.Controllers;
 [Route("[controller]")]
 public class UserController : ControllerBase
 {
+    private UserManager<User> _userManager;
+    private SignInManager<User> _signInManager;
     public UserController(UserManager<User> userManager, SignInManager<User> signInManager)
     {
         _userManager = userManager;
         _signInManager = signInManager;
     }
-    [HttpPost(nameof(ChangeName))]
+    
+    [HttpPost(nameof(ChangeCurrentName))]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ChangeCurrentName(User user,UserInfo info,string name)
     {
         if (info.IsAuthenticated == true && user != null)
         {
-            user.Name = name;
+            user.UserName = name;
         }
         return Ok();
     }
-    [HttpPost(nameof(ChangePassword))]
+    
+    [HttpPost(nameof(ChangeCurrentPassword))]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ChangeCurrentPassword(User user,UserInfo info,string password)
     {

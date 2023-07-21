@@ -1,3 +1,9 @@
+using DressForWeather.WebAPI.BackendModels.EFCoreModels;
+using DressForWeather.WebAPI.DbContexts;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
 [ApiController]
 [Route("[controller]")]
 [Authorize]

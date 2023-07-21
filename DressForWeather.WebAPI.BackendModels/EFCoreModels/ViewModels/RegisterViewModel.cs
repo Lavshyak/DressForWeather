@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace DressForWeather.WebAPI.BackendModels.EFCoreModels.ViewModels
 {
+    [Obsolete("?")]
     public class RegisterViewModel
     {
         [Required(ErrorMessage ="Не указан логин")]
