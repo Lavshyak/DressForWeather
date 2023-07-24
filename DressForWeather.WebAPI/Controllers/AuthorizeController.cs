@@ -49,8 +49,8 @@ public class AuthorizeController : ControllerBase
 		var result = await _userManager.CreateAsync(user, parameters.Password); 
 		if (!result.Succeeded) return BadRequest(result.Errors.FirstOrDefault()?.Description);
 
-		//попытался добавить юзеру роль newReg
-		HttpContext.User.AddIdentity(new ClaimsIdentity(new[]{new Claim(ClaimTypes.Role, "newReg")}));
+		//добавляет юзеру роль newReg
+		await _userManager.AddToRoleAsync(user, "newReg");
 		
 		return await Login(new LoginParameters
 		{
@@ -89,6 +89,13 @@ public class AuthorizeController : ControllerBase
 	}
 	
 	#if DEBUG
+
+	[HttpGet(nameof(IsNewReg))]
+	public bool IsNewReg()
+	{
+		HttpContext.User.Identities.First().AddClaim(new Claim(ClaimTypes.Role, "newReg"));
+		return User.IsInRole("newReg");
+	}
 	
 	//зарегестрированный и залогиненный юзер получает Ok и ошибку 404. с анонимусом тоже самое 
 	[Authorize(Roles = "newReg")]
