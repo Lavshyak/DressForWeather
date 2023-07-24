@@ -19,8 +19,8 @@ public class UserController : ControllerBase
         _signInManager = signInManager;
     }
     
-    [HttpPost(nameof(ChangeCurrentName))]
-    [ValidateAntiForgeryToken]
+    /*[HttpPost(nameof(ChangeCurrentName))]
+    //[ValidateAntiForgeryToken]
     public async Task<IActionResult> ChangeCurrentName(User user,UserInfo info,string name)
     {
         if (info.IsAuthenticated == true && user != null)
@@ -28,10 +28,10 @@ public class UserController : ControllerBase
             user.UserName = name;
         }
         return Ok();
-    }
+    }*/
     
-    [HttpPost(nameof(ChangeCurrentPassword))]
-    [ValidateAntiForgeryToken]
+    /*[HttpPost(nameof(ChangeCurrentPassword))]
+    //[ValidateAntiForgeryToken]
     public async Task<IActionResult> ChangeCurrentPassword(User user,UserInfo info,string password)
     {
         if(info.IsAuthenticated == true && user != null)
@@ -39,5 +39,5 @@ public class UserController : ControllerBase
             //user.password = password
         }
         return Ok();
-    }
+    }*/
 }

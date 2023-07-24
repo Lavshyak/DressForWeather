@@ -21,19 +21,19 @@ public class ClotchController : Controller
         _dbContext = db;
     }
 
-    [HttpGet]
+    [HttpGet(nameof(GetClotchById))]
     public async Task<Clotch?> GetClotchById(long id) 
     {
         var clotch = await _dbContext.Clotches.FirstOrDefaultAsync(c => c.Id == id);
         return clotch;
     }
-    [HttpGet]
+    [HttpGet(nameof(GetClotchByNama))]
     public async Task<Clotch?> GetClotchByNama(string name) 
     {
         var clotch = await _dbContext.Clotches.FirstOrDefaultAsync(c=>c.Name == name);
         return clotch;
     }
-    [HttpGet]
+    [HttpGet(nameof(GetClotchByType))]
     public async Task<Clotch?> GetClotchByType(string type) 
     {
         var clotch = await _dbContext.Clotches.FirstOrDefaultAsync(c => c.Type == type);

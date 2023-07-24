@@ -1,3 +1,5 @@
+using System.Security.Claims;
+using System.Security.Principal;
 using DressForWeather.SharedModels;
 using DressForWeather.WebAPI.BackendModels.EFCoreModels;
 using Microsoft.AspNetCore.Authorization;
@@ -6,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DressForWeather.WebAPI.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class AuthorizeController : ControllerBase
@@ -19,6 +22,7 @@ public class AuthorizeController : ControllerBase
 		_signInManager = signInManager;
 	}
 
+	[AllowAnonymous]
 	[HttpPost(nameof(Login))]
 	public async Task<IActionResult> Login(LoginParameters parameters)
 	{
@@ -33,6 +37,7 @@ public class AuthorizeController : ControllerBase
 	}
 
 
+	[AllowAnonymous]
 	[HttpPost(nameof(Register))]
 	public async Task<IActionResult> Register(RegisterParameters parameters)
 	{
@@ -44,14 +49,16 @@ public class AuthorizeController : ControllerBase
 		var result = await _userManager.CreateAsync(user, parameters.Password); 
 		if (!result.Succeeded) return BadRequest(result.Errors.FirstOrDefault()?.Description);
 
+		//попытался добавить юзеру роль newReg
+		HttpContext.User.AddIdentity(new ClaimsIdentity(new[]{new Claim(ClaimTypes.Role, "newReg")}));
+		
 		return await Login(new LoginParameters
 		{
 			UserName = parameters.UserName,
 			Password = parameters.Password
 		});
 	}
-
-	[Authorize]
+	
 	[HttpPost(nameof(Logout))]
 	public async Task<IActionResult> Logout()
 	{
@@ -59,6 +66,7 @@ public class AuthorizeController : ControllerBase
 		return Ok();
 	}
 
+	[AllowAnonymous]
 	[HttpGet(nameof(UserInfo))]
 	public UserInfo UserInfo()
 	{
@@ -81,6 +89,17 @@ public class AuthorizeController : ControllerBase
 	}
 	
 	#if DEBUG
+	
+	//зарегестрированный и залогиненный юзер получает Ok и ошибку 404. с анонимусом тоже самое 
+	[Authorize(Roles = "newReg")]
+	[HttpPost(nameof(NewRegTest))]
+	public Task<IActionResult> NewRegTest()
+	{
+		Console.WriteLine("newReg succes"); //это в консоль не выводится
+		return new Task<IActionResult>(Ok);
+	}
+
+	[AllowAnonymous]
 	[HttpPost(nameof(DebugLogiAndGetInfo))]
 	public async Task<IActionResult> DebugLogiAndGetInfo(LoginParameters parameters)
 	{

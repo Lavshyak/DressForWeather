@@ -57,8 +57,9 @@ internal static partial class Program
 	private static void AddManualAuthorization(this IServiceCollection services)
 	{
 		services.AddIdentity<User, IdentityRole<long>>()
-			.AddEntityFrameworkStores<MainDbContext>()
-			.AddDefaultTokenProviders();
+			.AddEntityFrameworkStores<MainDbContext>();			
+		//.AddRoles<IdentityRole>(); //попытался сделать это чтоб авторизация работала,
+       //но ошибка рантайма, нужен еще какой-то сервис
 
 		services.Configure<IdentityOptions>(options =>
 		{
