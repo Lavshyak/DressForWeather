@@ -1,3 +1,5 @@
+using System.Security.Claims;
+using System.Security.Principal;
 using DressForWeather.SharedModels;
 using DressForWeather.WebAPI.BackendModels.EFCoreModels;
 using Microsoft.AspNetCore.Authorization;
@@ -6,9 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DressForWeather.WebAPI.Controllers;
 
-[ApiController]
-[Route("[controller]")]
-public class AuthorizeController : ControllerBase
+[Authorize]
+public class AuthorizeController : ControllerBaseDressForWeather
 {
 	private readonly UserManager<User> _userManager;
 	private readonly SignInManager<User> _signInManager;
@@ -19,7 +20,8 @@ public class AuthorizeController : ControllerBase
 		_signInManager = signInManager;
 	}
 
-	[HttpPost(nameof(Login))]
+	[AllowAnonymous]
+	[HttpPost]
 	public async Task<IActionResult> Login(LoginParameters parameters)
 	{
 		var user = await _userManager.FindByNameAsync(parameters.UserName);
@@ -33,7 +35,8 @@ public class AuthorizeController : ControllerBase
 	}
 
 
-	[HttpPost(nameof(Register))]
+	[AllowAnonymous]
+	[HttpPost]
 	public async Task<IActionResult> Register(RegisterParameters parameters)
 	{
 		var user = new User
@@ -44,22 +47,25 @@ public class AuthorizeController : ControllerBase
 		var result = await _userManager.CreateAsync(user, parameters.Password); 
 		if (!result.Succeeded) return BadRequest(result.Errors.FirstOrDefault()?.Description);
 
+		//добавляет юзеру роль newReg
+		await _userManager.AddToRoleAsync(user, "newReg");
+		
 		return await Login(new LoginParameters
 		{
 			UserName = parameters.UserName,
 			Password = parameters.Password
 		});
 	}
-
-	[Authorize]
-	[HttpPost(nameof(Logout))]
+	
+	[HttpPost]
 	public async Task<IActionResult> Logout()
 	{
 		await _signInManager.SignOutAsync();
 		return Ok();
 	}
 
-	[HttpGet(nameof(UserInfo))]
+	[AllowAnonymous]
+	[HttpGet]
 	public UserInfo UserInfo()
 	{
 		//var user = await _userManager.GetUserAsync(HttpContext.User);
@@ -81,7 +87,24 @@ public class AuthorizeController : ControllerBase
 	}
 	
 	#if DEBUG
-	[HttpPost(nameof(DebugLogiAndGetInfo))]
+
+	[HttpGet]
+	public bool IsNewReg()
+	{
+		HttpContext.User.Identities.First().AddClaim(new Claim(ClaimTypes.Role, "newReg"));
+		return User.IsInRole("newReg");
+	}
+	
+	[Authorize(Roles = "newReg")]
+	[HttpPost]
+	public Task<IActionResult> NewRegTest()
+	{
+		Console.WriteLine("newReg succes");
+		return new Task<IActionResult>(Ok);
+	}
+
+	[AllowAnonymous]
+	[HttpPost]
 	public async Task<IActionResult> DebugLogiAndGetInfo(LoginParameters parameters)
 	{
 		var user = await _userManager.FindByNameAsync(parameters.UserName);

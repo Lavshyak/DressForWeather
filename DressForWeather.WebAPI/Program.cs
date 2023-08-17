@@ -49,18 +49,19 @@ internal static partial class Program
 
 		builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 			.AddCookie();
+		
 		builder.Services.AddAuthorization();
-
 		builder.Services.AddManualAuthorization();
 	}
 
 	private static void AddManualAuthorization(this IServiceCollection services)
 	{
 		services.AddIdentity<User, IdentityRole<long>>()
-			.AddEntityFrameworkStores<MainDbContext>()
-			.AddDefaultTokenProviders();
+			.AddEntityFrameworkStores<MainDbContext>();
+		//.AddRoles<IdentityRole>(); //попытался сделать это чтоб авторизация работала (работает без этого теперь),
+       //но ошибка рантайма, нужен еще какой-то сервис. может потом пригодится
 
-		services.Configure<IdentityOptions>(options =>
+       services.Configure<IdentityOptions>(options =>
 		{
 			// Password settings
 			options.Password.RequireDigit = false;
@@ -102,7 +103,23 @@ internal static partial class Program
 
 		app.UseAuthentication();
 		app.UseAuthorization();
-
+		
 		app.MapControllers();
+
+		app.AddIdentityRolesFromConfig();
+		
+	}
+
+	private static void AddIdentityRolesFromConfig(this WebApplication app)
+	{
+		using var scope = app.Services.CreateScope();
+		var roleNames = app.Configuration.GetValue("Roles", Array.Empty<string>()) ?? throw new Exception();
+		var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole<long>>>() ?? throw new Exception();
+		var roles = roleManager.Roles.ToArray();
+		var missingRoleNames = roleNames.Where(rs => roles.All(r => r.Name != rs));
+		foreach (var roleName in missingRoleNames)
+		{
+			roleManager.CreateAsync(new IdentityRole<long>(roleName)).Wait();
+		}
 	}
 }
