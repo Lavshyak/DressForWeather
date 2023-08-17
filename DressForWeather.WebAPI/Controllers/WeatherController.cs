@@ -6,9 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DressForWeather.WebAPI.Controllers;
 
-[ApiController]
-[Route("[controller]")]
-public class WeatherController : Controller
+public class WeatherController : ControllerBaseDressForWeather
 {
     private readonly MainDbContext _dbContext;
     private readonly ILogger<WeatherController> _logger;

@@ -58,8 +58,8 @@ internal static partial class Program
 	{
 		services.AddIdentity<User, IdentityRole<long>>()
 			.AddEntityFrameworkStores<MainDbContext>();
-		//.AddRoles<IdentityRole>(); //попытался сделать это чтоб авторизация работала,
-       //но ошибка рантайма, нужен еще какой-то сервис
+		//.AddRoles<IdentityRole>(); //попытался сделать это чтоб авторизация работала (работает без этого теперь),
+       //но ошибка рантайма, нужен еще какой-то сервис. может потом пригодится
 
        services.Configure<IdentityOptions>(options =>
 		{

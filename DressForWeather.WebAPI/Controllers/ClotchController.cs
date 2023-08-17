@@ -8,9 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DressForWeather.WebAPI.Controllers;
 
-[ApiController]
-[Route("[controller]")]
-public class ClotchController : Controller
+public class ClotchController : ControllerBaseDressForWeather
 {
     private readonly ILogger<ClotchController> _logger;
     private readonly MainDbContext _dbContext;
@@ -21,19 +19,21 @@ public class ClotchController : Controller
         _dbContext = db;
     }
 
-    [HttpGet(nameof(GetClotchById))]
+    [HttpGet]
     public async Task<Clotch?> GetClotchById(long id) 
     {
         var clotch = await _dbContext.Clotches.FirstOrDefaultAsync(c => c.Id == id);
         return clotch;
     }
-    [HttpGet(nameof(GetClotchByNama))]
-    public async Task<Clotch?> GetClotchByNama(string name) 
+    
+    [HttpGet]
+    public async Task<Clotch?> GetClotchByName(string name) 
     {
         var clotch = await _dbContext.Clotches.FirstOrDefaultAsync(c=>c.Name == name);
         return clotch;
     }
-    [HttpGet(nameof(GetClotchByType))]
+    
+    [HttpGet]
     public async Task<Clotch?> GetClotchByType(string type) 
     {
         var clotch = await _dbContext.Clotches.FirstOrDefaultAsync(c => c.Type == type);

@@ -7,9 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DressForWeather.WebAPI.Controllers;
 
 [Authorize]
-[ApiController]
-[Route("[controller]")]
-public class UserController : ControllerBase
+public class UserController : ControllerBaseDressForWeather
 {
     private UserManager<User> _userManager;
     private SignInManager<User> _signInManager;

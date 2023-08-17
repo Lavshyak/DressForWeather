@@ -9,9 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DressForWeather.WebAPI.Controllers;
 
 [Authorize]
-[ApiController]
-[Route("[controller]")]
-public class AuthorizeController : ControllerBase
+public class AuthorizeController : ControllerBaseDressForWeather
 {
 	private readonly UserManager<User> _userManager;
 	private readonly SignInManager<User> _signInManager;
@@ -23,7 +21,7 @@ public class AuthorizeController : ControllerBase
 	}
 
 	[AllowAnonymous]
-	[HttpPost(nameof(Login))]
+	[HttpPost]
 	public async Task<IActionResult> Login(LoginParameters parameters)
 	{
 		var user = await _userManager.FindByNameAsync(parameters.UserName);
@@ -38,7 +36,7 @@ public class AuthorizeController : ControllerBase
 
 
 	[AllowAnonymous]
-	[HttpPost(nameof(Register))]
+	[HttpPost]
 	public async Task<IActionResult> Register(RegisterParameters parameters)
 	{
 		var user = new User
@@ -59,7 +57,7 @@ public class AuthorizeController : ControllerBase
 		});
 	}
 	
-	[HttpPost(nameof(Logout))]
+	[HttpPost]
 	public async Task<IActionResult> Logout()
 	{
 		await _signInManager.SignOutAsync();
@@ -67,7 +65,7 @@ public class AuthorizeController : ControllerBase
 	}
 
 	[AllowAnonymous]
-	[HttpGet(nameof(UserInfo))]
+	[HttpGet]
 	public UserInfo UserInfo()
 	{
 		//var user = await _userManager.GetUserAsync(HttpContext.User);
@@ -90,24 +88,23 @@ public class AuthorizeController : ControllerBase
 	
 	#if DEBUG
 
-	[HttpGet(nameof(IsNewReg))]
+	[HttpGet]
 	public bool IsNewReg()
 	{
 		HttpContext.User.Identities.First().AddClaim(new Claim(ClaimTypes.Role, "newReg"));
 		return User.IsInRole("newReg");
 	}
 	
-	//зарегестрированный и залогиненный юзер получает Ok и ошибку 404. с анонимусом тоже самое 
 	[Authorize(Roles = "newReg")]
-	[HttpPost(nameof(NewRegTest))]
+	[HttpPost]
 	public Task<IActionResult> NewRegTest()
 	{
-		Console.WriteLine("newReg succes"); //это в консоль не выводится
+		Console.WriteLine("newReg succes");
 		return new Task<IActionResult>(Ok);
 	}
 
 	[AllowAnonymous]
-	[HttpPost(nameof(DebugLogiAndGetInfo))]
+	[HttpPost]
 	public async Task<IActionResult> DebugLogiAndGetInfo(LoginParameters parameters)
 	{
 		var user = await _userManager.FindByNameAsync(parameters.UserName);

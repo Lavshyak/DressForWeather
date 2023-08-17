@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+namespace DressForWeather.WebAPI.Controllers;
+
 [ApiController]
-[Route("[controller]")]
-[Authorize]
-public class DressReportController : ControllerBase
+public class DressReportController : ControllerBaseDressForWeather
 {
 	private readonly ILogger<DressReportController> _logger;
 	private readonly MainDbContext _mainDbContext;
@@ -18,7 +18,7 @@ public class DressReportController : ControllerBase
 	}
 
 	[Authorize]
-	[HttpGet(Name = "GetDressReportById")]
+	[HttpGet]
 	public async Task<DressReport?> GetDressReportById(long id)
 	{
 		var report = await _mainDbContext.DressReports.FirstOrDefaultAsync(dr => dr.Id == id);
