@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace DressForWeather.WebAPI.BackendModels.EFCoreModels;
 
 public class WeatherState
@@ -9,6 +11,7 @@ public class WeatherState
 	/// <summary>
 	/// влажность
 	/// </summary>
+	[Range(0, 1, ErrorMessage = "Must be between 0% and 1%")]
 	public float Humidity { get; set; }
 	
 	/// <summary>
@@ -24,5 +27,7 @@ public class WeatherState
 	/// <summary>
 	/// На сколько солнечно от 0 до 1, где 0 - 0%, 1 - 100%
 	/// </summary>
+	[Range(0, 1, ErrorMessage = "Must be between 0% and 1%")]
 	public float HowSunny { get; set; }
+	
 }

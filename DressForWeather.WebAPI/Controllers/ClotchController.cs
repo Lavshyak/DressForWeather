@@ -10,12 +10,10 @@ namespace DressForWeather.WebAPI.Controllers;
 
 public class ClotchController : ControllerBaseDressForWeather
 {
-    private readonly ILogger<ClotchController> _logger;
     private readonly MainDbContext _dbContext;
 
-    public ClotchController(ILogger<ClotchController> logger, MainDbContext db) 
+    public ClotchController(MainDbContext db) 
     {
-        _logger = logger;
         _dbContext = db;
     }
 

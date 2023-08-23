@@ -9,10 +9,8 @@ namespace DressForWeather.WebAPI.Controllers;
 public class WeatherController : ControllerBaseDressForWeather
 {
     private readonly MainDbContext _dbContext;
-    private readonly ILogger<WeatherController> _logger;
     public WeatherController(ILogger<WeatherController> logger, MainDbContext db) 
     {
-        _logger = logger;
         _dbContext = db;
     }
     

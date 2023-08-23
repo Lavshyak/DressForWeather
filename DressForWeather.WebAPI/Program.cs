@@ -8,13 +8,13 @@ namespace DressForWeather.WebAPI;
 
 internal static partial class Program
 {
-	private static void Main(string[] args)
+	private static async Task Main(string[] args)
 	{
 		var builder = WebApplication.CreateBuilder(args);
 		builder.ConfigureServices();
 		var app = builder.Build();
-		app.ConfigureApp();
-		app.Run();
+		await app.ConfigureApp();
+		await app.RunAsync();
 	}
 
 	private static void ConfigureServices(this WebApplicationBuilder builder)
@@ -90,7 +90,7 @@ internal static partial class Program
 		});
 	}
 
-	private static void ConfigureApp(this WebApplication app)
+	private static async Task ConfigureApp(this WebApplication app)
 	{
 		// Configure the HTTP request pipeline.
 		if (app.Environment.IsDevelopment())
@@ -106,20 +106,16 @@ internal static partial class Program
 		
 		app.MapControllers();
 
-		app.AddIdentityRolesFromConfig();
-		
+		await app.Services.SynchronizeIdentityRoles();
 	}
 
-	private static void AddIdentityRolesFromConfig(this WebApplication app)
+	private static readonly string[] RequiredRoleNames = {"Admin", "User"};
+	private static async Task SynchronizeIdentityRoles(this IServiceProvider serviceProvider)
 	{
-		using var scope = app.Services.CreateScope();
-		var roleNames = app.Configuration.GetValue("Roles", Array.Empty<string>()) ?? throw new Exception();
+		using var scope = serviceProvider.CreateScope();
 		var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole<long>>>() ?? throw new Exception();
-		var roles = roleManager.Roles.ToArray();
-		var missingRoleNames = roleNames.Where(rs => roles.All(r => r.Name != rs));
-		foreach (var roleName in missingRoleNames)
-		{
-			roleManager.CreateAsync(new IdentityRole<long>(roleName)).Wait();
-		}
+		var existRoles = roleManager.Roles.ToArray();
+		var missingRoleNames = RequiredRoleNames.Where(rs => existRoles.All(r => r.Name != rs));
+		await Task.WhenAll(missingRoleNames.Select(roleName => roleManager.CreateAsync(new IdentityRole<long>(roleName))));
 	}
 }

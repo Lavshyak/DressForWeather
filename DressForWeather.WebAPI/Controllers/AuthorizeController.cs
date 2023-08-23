@@ -88,21 +88,6 @@ public class AuthorizeController : ControllerBaseDressForWeather
 	
 	#if DEBUG
 
-	[HttpGet]
-	public bool IsNewReg()
-	{
-		HttpContext.User.Identities.First().AddClaim(new Claim(ClaimTypes.Role, "newReg"));
-		return User.IsInRole("newReg");
-	}
-	
-	[Authorize(Roles = "newReg")]
-	[HttpPost]
-	public Task<IActionResult> NewRegTest()
-	{
-		Console.WriteLine("newReg succes");
-		return new Task<IActionResult>(Ok);
-	}
-
 	[AllowAnonymous]
 	[HttpPost]
 	public async Task<IActionResult> DebugLogiAndGetInfo(LoginParameters parameters)
