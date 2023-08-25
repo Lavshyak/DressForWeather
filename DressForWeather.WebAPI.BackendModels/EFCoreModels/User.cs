@@ -1,8 +1,9 @@
-using Microsoft.AspNetCore.Identity;
+global using UserIdType = System.Int64;
 
+using Microsoft.AspNetCore.Identity;
 namespace DressForWeather.WebAPI.BackendModels.EFCoreModels;
 
-public class User : IdentityUser<long>
+public class User : IdentityUser<UserIdType>
 {
 	/* 
 	 * from IdentityUser:

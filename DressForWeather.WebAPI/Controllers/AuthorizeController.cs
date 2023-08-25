@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using System.Security.Principal;
 using DressForWeather.SharedModels;
 using DressForWeather.WebAPI.BackendModels.EFCoreModels;
 using Microsoft.AspNetCore.Authorization;
@@ -11,9 +10,9 @@ namespace DressForWeather.WebAPI.Controllers;
 [Authorize]
 public class AuthorizeController : ControllerBaseDressForWeather
 {
-	private readonly UserManager<User> _userManager;
 	private readonly SignInManager<User> _signInManager;
-	
+	private readonly UserManager<User> _userManager;
+
 	public AuthorizeController(UserManager<User> userManager, SignInManager<User> signInManager)
 	{
 		_userManager = userManager;
@@ -43,20 +42,20 @@ public class AuthorizeController : ControllerBaseDressForWeather
 		{
 			UserName = parameters.UserName
 		};
-		
-		var result = await _userManager.CreateAsync(user, parameters.Password); 
+
+		var result = await _userManager.CreateAsync(user, parameters.Password);
 		if (!result.Succeeded) return BadRequest(result.Errors.FirstOrDefault()?.Description);
 
 		//добавляет юзеру роль newReg
 		await _userManager.AddToRoleAsync(user, "newReg");
-		
+
 		return await Login(new LoginParameters
 		{
 			UserName = parameters.UserName,
 			Password = parameters.Password
 		});
 	}
-	
+
 	[HttpPost]
 	public async Task<IActionResult> Logout()
 	{
@@ -72,6 +71,13 @@ public class AuthorizeController : ControllerBaseDressForWeather
 		return BuildUserInfo();
 	}
 
+#if DEBUG
+	[HttpGet]
+	public string GetMyId()
+	{
+		return User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+	}
+#endif
 
 	private UserInfo BuildUserInfo()
 	{
@@ -85,8 +91,8 @@ public class AuthorizeController : ControllerBaseDressForWeather
 				.ToDictionary(c => c.Type, c => c.Value)
 		};
 	}
-	
-	#if DEBUG
+
+#if DEBUG
 
 	[AllowAnonymous]
 	[HttpPost]
@@ -100,5 +106,5 @@ public class AuthorizeController : ControllerBaseDressForWeather
 		await _signInManager.SignInAsync(user, parameters.RememberMe);
 		return new JsonResult(BuildUserInfo());
 	}
-	#endif
+#endif
 }

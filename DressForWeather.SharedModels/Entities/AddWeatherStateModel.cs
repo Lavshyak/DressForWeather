@@ -1,11 +1,10 @@
 using System.ComponentModel.DataAnnotations;
+using DressForWeather.WebAPI.BackendModels;
 
-namespace DressForWeather.WebAPI.BackendModels.EFCoreModels;
+namespace DressForWeather.SharedModels.Entities;
 
-public class WeatherState
+public class AddWeatherStateModel
 {
-	public long Id { get; set; }
-
 	public float TemperatureCelsius { get; set; }
 
 	/// <summary>
@@ -17,6 +16,7 @@ public class WeatherState
 	/// <summary>
 	///     скорость ветра в м/с
 	/// </summary>
+	[Range(0, float.MaxValue)]
 	public float WindSpeedMps { get; set; }
 
 	/// <summary>

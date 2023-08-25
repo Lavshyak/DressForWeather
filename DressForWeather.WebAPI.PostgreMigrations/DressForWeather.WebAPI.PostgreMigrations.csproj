@@ -7,11 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DressForWeather.WebAPI.DbContexts\DressForWeather.WebAPI.DbContexts.csproj" />
+        <ProjectReference Include="..\DressForWeather.WebAPI.DbContexts\DressForWeather.WebAPI.DbContexts.csproj"/>
     </ItemGroup>
 
 </Project>

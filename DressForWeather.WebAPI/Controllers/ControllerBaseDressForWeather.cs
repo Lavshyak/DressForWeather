@@ -6,5 +6,4 @@ namespace DressForWeather.WebAPI.Controllers;
 [Route("[controller]/[action]")]
 public class ControllerBaseDressForWeather : ControllerBase
 {
-	
 }

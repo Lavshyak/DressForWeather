@@ -8,7 +8,11 @@ namespace DressForWeather.WebAPI.DbContexts;
 public class MainDbContext : IdentityDbContext<User, IdentityRole<long>, long>, IMainDbContext
 {
 	public const string ContextName = "Main";
-	
+
+	public MainDbContext(DbContextOptions<MainDbContext> options) : base(options)
+	{
+	}
+
 	/*
 	 public virtual DbSet<(User)TUser> Users { get; set; } = default!; //IdentityDbContext-> IdentityDbContext -> IdentityUserContext.Users
 	 
@@ -20,14 +24,7 @@ public class MainDbContext : IdentityDbContext<User, IdentityRole<long>, long>, 
 
 	public DbSet<Clotch> Clotches { get; } = default!;
 	public DbSet<ClotchParameterPair> ClotchesParameterPairs { get; protected set; } = default!;
-	public DbSet<ClothesSet> ClothesSets { get;  } = default!;
-	public DbSet<ClothType> ClothTypes { get;  } = default!;
-	public DbSet<DressReport> DressReports { get;  } = default!;
-	
-	public DbSet<WeatherState> WeatherStates { get;  } = default!;
+	public DbSet<DressReport> DressReports { get; } = default!;
 
-	public MainDbContext(DbContextOptions<MainDbContext> options) : base(options)
-	{
-		
-	}
+	public DbSet<WeatherState> WeatherStates { get; } = default!;
 }

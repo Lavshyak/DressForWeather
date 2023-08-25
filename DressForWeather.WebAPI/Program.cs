@@ -1,3 +1,5 @@
+global using UserIdType = System.Int64;
+
 using DressForWeather.WebAPI.BackendModels.EFCoreModels;
 using DressForWeather.WebAPI.DbContexts;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -8,6 +10,8 @@ namespace DressForWeather.WebAPI;
 
 internal static partial class Program
 {
+	private static readonly string[] RequiredRoleNames = {"Admin", "User"};
+
 	private static async Task Main(string[] args)
 	{
 		var builder = WebApplication.CreateBuilder(args);
@@ -29,16 +33,18 @@ internal static partial class Program
 		builder.Services.AddDbContext<MainDbContext>(
 			options =>
 			{
-				var dbProvider = builder.Configuration.GetDbProviderNameFor(MainDbContext.ContextName, DbProviders.Postgre);
+				var dbProvider =
+					builder.Configuration.GetDbProviderNameFor(MainDbContext.ContextName, DbProviders.Postgre);
 				_ = dbProvider
 					switch
 					{
 						//сделано: dotnet ef migrations add InitialCreate --project ../DressForWeather.WebAPI.PostgreMigrations -- --provider Postgre
 						//потом: dotnet ef database update
 						DbProviders.Postgre => options.UseNpgsql(
-							builder.Configuration.GetConnectionStringForDbContext(dbProvider, MainDbContext.ContextName),
+							builder.Configuration.GetConnectionStringForDbContext(dbProvider,
+								MainDbContext.ContextName),
 							x => x.MigrationsAssembly(GetMigrationsAssemblyNameFor(dbProvider))),
-						
+
 						//если перейдем на другую базу данных, то нужно сделать действия, аналогичные строке выше
 
 						_ => throw new Exception($"Unsupported provider: {dbProvider}")
@@ -49,7 +55,7 @@ internal static partial class Program
 
 		builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 			.AddCookie();
-		
+
 		builder.Services.AddAuthorization();
 		builder.Services.AddManualAuthorization();
 	}
@@ -59,9 +65,9 @@ internal static partial class Program
 		services.AddIdentity<User, IdentityRole<long>>()
 			.AddEntityFrameworkStores<MainDbContext>();
 		//.AddRoles<IdentityRole>(); //попытался сделать это чтоб авторизация работала (работает без этого теперь),
-       //но ошибка рантайма, нужен еще какой-то сервис. может потом пригодится
+		//но ошибка рантайма, нужен еще какой-то сервис. может потом пригодится
 
-       services.Configure<IdentityOptions>(options =>
+		services.Configure<IdentityOptions>(options =>
 		{
 			// Password settings
 			options.Password.RequireDigit = false;
@@ -103,19 +109,19 @@ internal static partial class Program
 
 		app.UseAuthentication();
 		app.UseAuthorization();
-		
+
 		app.MapControllers();
 
 		await app.Services.SynchronizeIdentityRoles();
 	}
 
-	private static readonly string[] RequiredRoleNames = {"Admin", "User"};
 	private static async Task SynchronizeIdentityRoles(this IServiceProvider serviceProvider)
 	{
 		using var scope = serviceProvider.CreateScope();
 		var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole<long>>>() ?? throw new Exception();
 		var existRoles = roleManager.Roles.ToArray();
 		var missingRoleNames = RequiredRoleNames.Where(rs => existRoles.All(r => r.Name != rs));
-		await Task.WhenAll(missingRoleNames.Select(roleName => roleManager.CreateAsync(new IdentityRole<long>(roleName))));
+		await Task.WhenAll(
+			missingRoleNames.Select(roleName => roleManager.CreateAsync(new IdentityRole<long>(roleName))));
 	}
 }
