@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace DressForWeather.SharedModels.Entities;
+namespace DressForWeather.SharedModels.Inputs;
 
-public class AddDressReportModel
+public class InputDressReport
 {
 	/// <summary>
 	///     одежда

@@ -1,6 +1,6 @@
-namespace DressForWeather.SharedModels.Entities;
+namespace DressForWeather.SharedModels.Inputs;
 
-public class AddClotchParameterPair
+public class InputClotchParameterPair
 {
 	public required string Key { get; set; }
 

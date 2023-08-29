@@ -1,8 +1,6 @@
-using System.Security.Claims;
-using DressForWeather.SharedModels.Entities;
+using DressForWeather.SharedModels.Inputs;
 using DressForWeather.WebAPI.BackendModels.EFCoreModels;
 using DressForWeather.WebAPI.DbContexts;
-using DressForWeather.WebAPI.Exceptions;
 using DressForWeather.WebAPI.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -24,17 +22,17 @@ public class DressReportController : ControllerBaseDressForWeather
 	}
 
 	[HttpPost]
-	public async Task<long> AddDressReport(AddDressReportModel addDressReportModel)
+	public async Task<long> AddDressReport(InputDressReport inputDressReport)
 	{
-		var clotches = await _mainDbContext.Clotches.Where(c => addDressReportModel.ClothIds.Contains(c.Id))
+		var clotches = await _mainDbContext.Clotches.Where(c => inputDressReport.ClothIds.Contains(c.Id))
 			.ToListAsync();
 
 		var dressReport = await _mainDbContext.DressReports.AddAsync(new DressReport
 		{
-			Clothes = clotches, Feeling = addDressReportModel.Feeling,
+			Clothes = clotches, Feeling = inputDressReport.Feeling,
 			UserReporter = await _mainDbContext.Users.FirstAsync(u => u.Id == User.GetId()),
 			WeatherState =
-				await _mainDbContext.WeatherStates.FirstAsync(w => w.Id == addDressReportModel.WeatherStateId)
+				await _mainDbContext.WeatherStates.FirstAsync(w => w.Id == inputDressReport.WeatherStateId)
 		});
 
 		return dressReport.Entity.Id;

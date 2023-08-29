@@ -1,4 +1,4 @@
-using DressForWeather.SharedModels.Entities;
+using DressForWeather.SharedModels.Inputs;
 using DressForWeather.WebAPI.BackendModels.EFCoreModels;
 using DressForWeather.WebAPI.DbContexts;
 using Microsoft.AspNetCore.Authorization;
@@ -18,15 +18,15 @@ public class WeatherController : ControllerBaseDressForWeather
 	}
 
 	[HttpPost]
-	public async Task<long> AddWeatherState(AddWeatherStateModel addWeatherStateModel)
+	public async Task<long> AddWeatherState(InputWeatherState inputWeatherState)
 	{
 		var weatherState = await _dbContext.WeatherStates.AddAsync(new WeatherState
 		{
-			HowSunny = addWeatherStateModel.HowSunny,
-			Humidity = addWeatherStateModel.Humidity,
-			TemperatureCelsius = addWeatherStateModel.TemperatureCelsius,
-			WindDirection = addWeatherStateModel.WindDirection,
-			WindSpeedMps = addWeatherStateModel.WindSpeedMps
+			HowSunny = inputWeatherState.HowSunny,
+			Humidity = inputWeatherState.Humidity,
+			TemperatureCelsius = inputWeatherState.TemperatureCelsius,
+			WindDirection = inputWeatherState.WindDirection,
+			WindSpeedMps = inputWeatherState.WindSpeedMps
 		});
 		return weatherState.Entity.Id;
 	}

@@ -1,102 +1,30 @@
-global using UserIdType = System.Int64;
-
 using DressForWeather.WebAPI.BackendModels.EFCoreModels;
 using DressForWeather.WebAPI.DbContexts;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace DressForWeather.WebAPI;
 
-internal static partial class Program
+public static partial class Program
 {
-	private static readonly string[] RequiredRoleNames = {"Admin", "User"};
-
-	private static async Task Main(string[] args)
+	public static async Task Main(string[] args)
 	{
-		var builder = WebApplication.CreateBuilder(args);
-		builder.ConfigureServices();
+		var builder = new WebHostBuilder().UseStartup<Startup>();
 		var app = builder.Build();
-		await app.ConfigureApp();
 		await app.RunAsync();
+		
+		/*var builder = WebApplication.CreateBuilder(args);
+		var startup = new Startup(builder.Configuration);
+		startup.ConfigureServices(builder.Services);
+		var app = builder.Build();
+		startup.Configure(app, app.Environment);
+		app.Run();*/
+
 	}
 
-	private static void ConfigureServices(this WebApplicationBuilder builder)
-	{
-		// Add services to the container.
+	
 
-		builder.Services.AddControllers();
-		// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-		builder.Services.AddEndpointsApiExplorer();
-		builder.Services.AddSwaggerGen();
-
-		builder.Services.AddDbContext<MainDbContext>(
-			options =>
-			{
-				var dbProvider =
-					builder.Configuration.GetDbProviderNameFor(MainDbContext.ContextName, DbProviders.Postgre);
-				_ = dbProvider
-					switch
-					{
-						//сделано: dotnet ef migrations add InitialCreate --project ../DressForWeather.WebAPI.PostgreMigrations -- --provider Postgre
-						//потом: dotnet ef database update
-						DbProviders.Postgre => options.UseNpgsql(
-							builder.Configuration.GetConnectionStringForDbContext(dbProvider,
-								MainDbContext.ContextName),
-							x => x.MigrationsAssembly(GetMigrationsAssemblyNameFor(dbProvider))),
-
-						//если перейдем на другую базу данных, то нужно сделать действия, аналогичные строке выше
-
-						_ => throw new Exception($"Unsupported provider: {dbProvider}")
-					};
-			});
-
-		builder.Services.AddScoped<MainDbContext>();
-
-		builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-			.AddCookie();
-
-		builder.Services.AddAuthorization();
-		builder.Services.AddManualAuthorization();
-	}
-
-	private static void AddManualAuthorization(this IServiceCollection services)
-	{
-		services.AddIdentity<User, IdentityRole<long>>()
-			.AddEntityFrameworkStores<MainDbContext>();
-		//.AddRoles<IdentityRole>(); //попытался сделать это чтоб авторизация работала (работает без этого теперь),
-		//но ошибка рантайма, нужен еще какой-то сервис. может потом пригодится
-
-		services.Configure<IdentityOptions>(options =>
-		{
-			// Password settings
-			options.Password.RequireDigit = false;
-			options.Password.RequiredLength = 4;
-			options.Password.RequireNonAlphanumeric = false;
-			options.Password.RequireUppercase = false;
-			options.Password.RequireLowercase = false;
-
-			// Lockout settings
-			options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
-			options.Lockout.MaxFailedAccessAttempts = 10;
-			options.Lockout.AllowedForNewUsers = true;
-
-			// User settings
-			options.User.RequireUniqueEmail = false;
-		});
-
-		services.ConfigureApplicationCookie(options =>
-		{
-			options.Cookie.HttpOnly = true;
-			options.Events.OnRedirectToLogin = context =>
-			{
-				context.Response.StatusCode = 401;
-				return Task.CompletedTask;
-			};
-		});
-	}
-
-	private static async Task ConfigureApp(this WebApplication app)
+	/*private static async Task ConfigureApp(this WebApplication app)
 	{
 		// Configure the HTTP request pipeline.
 		if (app.Environment.IsDevelopment())
@@ -113,15 +41,7 @@ internal static partial class Program
 		app.MapControllers();
 
 		await app.Services.SynchronizeIdentityRoles();
-	}
+	}*/
 
-	private static async Task SynchronizeIdentityRoles(this IServiceProvider serviceProvider)
-	{
-		using var scope = serviceProvider.CreateScope();
-		var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole<long>>>() ?? throw new Exception();
-		var existRoles = roleManager.Roles.ToArray();
-		var missingRoleNames = RequiredRoleNames.Where(rs => existRoles.All(r => r.Name != rs));
-		await Task.WhenAll(
-			missingRoleNames.Select(roleName => roleManager.CreateAsync(new IdentityRole<long>(roleName))));
-	}
+	
 }

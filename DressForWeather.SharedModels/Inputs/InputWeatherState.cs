@@ -1,9 +1,8 @@
 using System.ComponentModel.DataAnnotations;
-using DressForWeather.WebAPI.BackendModels;
 
-namespace DressForWeather.SharedModels.Entities;
+namespace DressForWeather.SharedModels.Inputs;
 
-public class AddWeatherStateModel
+public class InputWeatherState
 {
 	public float TemperatureCelsius { get; set; }
 

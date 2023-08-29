@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DressForWeather.WebAPI.Back
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DressForWeather.WebAPI.PostgreMigrations", "DressForWeather.WebAPI.PostgreMigrations\DressForWeather.WebAPI.PostgreMigrations.csproj", "{6A072F68-9CD5-43F6-B9D0-F380ECD23012}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DressForWeather.WebAPI.Tests", "DressForWeather.WebAPI.Tests\DressForWeather.WebAPI.Tests.csproj", "{DFF045F2-9E32-4BB6-BEC7-A820BD88A7D0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{6A072F68-9CD5-43F6-B9D0-F380ECD23012}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A072F68-9CD5-43F6-B9D0-F380ECD23012}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A072F68-9CD5-43F6-B9D0-F380ECD23012}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFF045F2-9E32-4BB6-BEC7-A820BD88A7D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFF045F2-9E32-4BB6-BEC7-A820BD88A7D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFF045F2-9E32-4BB6-BEC7-A820BD88A7D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFF045F2-9E32-4BB6-BEC7-A820BD88A7D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

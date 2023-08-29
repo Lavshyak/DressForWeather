@@ -1,9 +1,8 @@
 using System.ComponentModel.DataAnnotations;
-using DressForWeather.SharedModels;
 
-namespace DressForWeather.WebAPI.BackendModels.EFCoreModels;
+namespace DressForWeather.SharedModels.Outputs;
 
-public class WeatherState
+public class OutputWeatherState
 {
 	public long Id { get; set; }
 

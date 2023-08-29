@@ -3,7 +3,7 @@ namespace DressForWeather.WebAPI.BackendModels.EFCoreModels;
 [Obsolete]
 public class ClothType
 {
-	public int Id { get; set; }
+	public long Id { get; set; }
 
 	/// <summary>
 	///     это должно быть тем, что можно найти, используя динамичный поиск.

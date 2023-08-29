@@ -1,4 +1,4 @@
-namespace DressForWeather.WebAPI.BackendModels;
+namespace DressForWeather.SharedModels;
 
 /// <summary>
 ///     Направление ветра

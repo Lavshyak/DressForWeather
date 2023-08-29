@@ -1,4 +1,4 @@
-using DressForWeather.SharedModels.Entities;
+using DressForWeather.SharedModels.Inputs;
 using DressForWeather.WebAPI.BackendModels.EFCoreModels;
 using DressForWeather.WebAPI.DbContexts;
 using Microsoft.AspNetCore.Authorization;
@@ -20,17 +20,17 @@ public class ClotchController : ControllerBaseDressForWeather
 	/// <summary>
 	///     Add clotch to data base
 	/// </summary>
-	/// <param name="addClotchModel"></param>
+	/// <param name="inputClotch"></param>
 	/// <returns>Id of added clotch</returns>
 	[HttpPost]
-	public async Task<long> AddClotch(AddClotchModel addClotchModel)
+	public async Task<long> AddClotch(InputClotch inputClotch)
 	{
 		var clotchParameters =
 			await _dbContext.ClotchesParameterPairs.Where(p =>
-				addClotchModel.ClotchParametersIds.Contains(p.Id)).ToListAsync();
+				inputClotch.ClotchParametersIds.Contains(p.Id)).ToListAsync();
 
 		var clotch = await _dbContext.Clotches.AddAsync(new Clotch
-			{ClotchParameters = clotchParameters, Name = addClotchModel.Name, Type = addClotchModel.Type});
+			{ClotchParameters = clotchParameters, Name = inputClotch.Name, Type = inputClotch.Type});
 		return clotch.Entity.Id;
 	}
 
