@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DressForWeather.WebAPI.Controllers;
 
-public class DebugController : ControllerBaseDressForWeather
+public class DebugController : ControllerBaseWithRouteToAction
 {
 	private readonly SignInManager<User> _signInManager;
 	private readonly UserManager<User> _userManager;

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 namespace DressForWeather.WebAPI.Controllers;
 
 [Authorize]
-public class UserController : ControllerBaseDressForWeather
+public class UserController : ControllerBaseWithRouteToAction
 {
 	private SignInManager<User> _signInManager;
 	private UserManager<User> _userManager;

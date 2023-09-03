@@ -1,4 +1,5 @@
 using DressForWeather.SharedModels.Inputs;
+using DressForWeather.SharedModels.Outputs;
 using DressForWeather.WebAPI.BackendModels.EFCoreModels;
 using DressForWeather.WebAPI.DbContexts;
 using Microsoft.AspNetCore.Authorization;
@@ -8,17 +9,18 @@ using Microsoft.EntityFrameworkCore;
 namespace DressForWeather.WebAPI.Controllers;
 
 [Authorize]
-public class WeatherController : ControllerBaseDressForWeather
+public class WeatherController : ControllerBaseWithRouteToController
 {
-	private readonly MainDbContext _dbContext;
+	private readonly IMainDbContext _dbContext;
 
-	public WeatherController(ILogger<WeatherController> logger, MainDbContext db)
+	public WeatherController(ILogger<WeatherController> logger, IMainDbContext db)
 	{
 		_dbContext = db;
 	}
 
 	[HttpPost]
-	public async Task<long> AddWeatherState(InputWeatherState inputWeatherState)
+	[ProducesResponseType(typeof(long), StatusCodes.Status201Created)]
+	public async Task<long> Set(InputWeatherState inputWeatherState)
 	{
 		var weatherState = await _dbContext.WeatherStates.AddAsync(new WeatherState
 		{
@@ -32,11 +34,11 @@ public class WeatherController : ControllerBaseDressForWeather
 	}
 
 	[HttpGet]
-	public async Task<WeatherState?> GetWeatherById(WeatherState state)
+	[ProducesResponseType(typeof(OutputSearchResult<WeatherState>), StatusCodes.Status200OK)]
+	public async Task<OutputSearchResult<WeatherState>> Get(WeatherState state)
 	{
-		if (state == null)
-			throw new Exception("WeatherState error");
 		var weather = await _dbContext.WeatherStates.FirstOrDefaultAsync(c => c.Id == state.Id);
-		return weather;
+		
+		return new OutputSearchResult<WeatherState>(weather);
 	}
 }

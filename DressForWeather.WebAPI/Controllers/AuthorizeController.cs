@@ -3,11 +3,14 @@ using DressForWeather.WebAPI.BackendModels.EFCoreModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace DressForWeather.WebAPI.Controllers;
 
 [Authorize]
-public class AuthorizeController : ControllerBaseDressForWeather
+[ProducesErrorResponseType(typeof(string))]
+[ProducesResponseType(StatusCodes.Status200OK)]
+public class AuthorizeController : ControllerBaseWithRouteToAction
 {
 	private readonly SignInManager<User> _signInManager;
 	private readonly UserManager<User> _userManager;
@@ -20,6 +23,7 @@ public class AuthorizeController : ControllerBaseDressForWeather
 
 	[AllowAnonymous]
 	[HttpPost]
+	[ProducesResponseType(typeof(string),StatusCodes.Status400BadRequest)]
 	public async Task<IActionResult> Login(LoginParameters parameters)
 	{
 		var user = await _userManager.FindByNameAsync(parameters.UserName);
@@ -35,6 +39,7 @@ public class AuthorizeController : ControllerBaseDressForWeather
 
 	[AllowAnonymous]
 	[HttpPost]
+	[ProducesResponseType(typeof(string),StatusCodes.Status400BadRequest)]
 	public async Task<IActionResult> Register(RegisterParameters parameters)
 	{
 		var user = new User
@@ -46,7 +51,7 @@ public class AuthorizeController : ControllerBaseDressForWeather
 		if (!result.Succeeded) return BadRequest(result.Errors.FirstOrDefault()?.Description);
 
 		//добавляет юзеру роль newReg
-		await _userManager.AddToRoleAsync(user, "newReg");
+		await _userManager.AddToRoleAsync(user, "User");
 
 		return await Login(new LoginParameters
 		{
@@ -55,7 +60,9 @@ public class AuthorizeController : ControllerBaseDressForWeather
 		});
 	}
 
-	[HttpPost]
+	[HttpGet]
+	[ProducesResponseType(StatusCodes.Status200OK)]
+	[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 	public async Task<IActionResult> Logout()
 	{
 		await _signInManager.SignOutAsync();

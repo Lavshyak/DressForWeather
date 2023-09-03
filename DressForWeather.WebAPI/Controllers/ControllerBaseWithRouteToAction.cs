@@ -4,6 +4,6 @@ namespace DressForWeather.WebAPI.Controllers;
 
 [ApiController]
 [Route("[controller]/[action]")]
-public class ControllerBaseDressForWeather : ControllerBase
+public abstract class ControllerBaseWithRouteToAction : ControllerBase
 {
 }

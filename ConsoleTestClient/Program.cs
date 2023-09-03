@@ -18,8 +18,7 @@ internal static class Program
 		var regParams = new RegisterParameters
 		{
 			UserName = "Test1",
-			Password = "1234",
-			PasswordConfirm = "1234"
+			Password = "1234"
 		};
 
 		HttpResponseMessage httpResponseMessage;

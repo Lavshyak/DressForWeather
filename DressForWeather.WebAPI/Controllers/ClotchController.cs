@@ -1,4 +1,5 @@
 using DressForWeather.SharedModels.Inputs;
+using DressForWeather.SharedModels.Outputs;
 using DressForWeather.WebAPI.BackendModels.EFCoreModels;
 using DressForWeather.WebAPI.DbContexts;
 using Microsoft.AspNetCore.Authorization;
@@ -8,9 +9,10 @@ using Microsoft.EntityFrameworkCore;
 namespace DressForWeather.WebAPI.Controllers;
 
 [Authorize]
-public class ClotchController : ControllerBaseDressForWeather
+[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+public class ClotchController : ControllerBaseWithRouteToController
 {
-	private readonly MainDbContext _dbContext;
+	private readonly IMainDbContext _dbContext;
 
 	public ClotchController(MainDbContext db)
 	{
@@ -23,7 +25,8 @@ public class ClotchController : ControllerBaseDressForWeather
 	/// <param name="inputClotch"></param>
 	/// <returns>Id of added clotch</returns>
 	[HttpPost]
-	public async Task<long> AddClotch(InputClotch inputClotch)
+	[ProducesResponseType(typeof(long), StatusCodes.Status201Created)]
+	public async Task<long> Set(InputClotch inputClotch)
 	{
 		var clotchParameters =
 			await _dbContext.ClotchesParameterPairs.Where(p =>
@@ -35,23 +38,40 @@ public class ClotchController : ControllerBaseDressForWeather
 	}
 
 	[HttpGet]
-	public async Task<Clotch?> GetClotchById(long id)
+	[ProducesResponseType(typeof(OutputSearchResult<Clotch>), StatusCodes.Status200OK)]
+	public async Task<OutputSearchResult<Clotch>> Get([FromQuery] long? id = null, [FromQuery] string? name = null,
+		[FromQuery] string? type = null)
 	{
-		var clotch = await _dbContext.Clotches.FirstOrDefaultAsync(c => c.Id == id);
-		return clotch;
+		Clotch? clotch = null;
+		if (id != null)
+		{
+			clotch = await _dbContext.Clotches.FirstOrDefaultAsync(c => c.Id == id);
+		}
+		else if (name != null)
+		{
+			clotch = await _dbContext.Clotches.FirstOrDefaultAsync(c => c.Name == name);
+		}
+		else if (type != null)
+		{
+			clotch = await _dbContext.Clotches.FirstOrDefaultAsync(c => c.Type == type);
+		}
+
+		return new OutputSearchResult<Clotch>(clotch);
+	}
+
+	/*[HttpGet]
+	[ProducesResponseType(typeof(OutputSearchResult<Clotch>), StatusCodes.Status200OK)]
+	public async Task<OutputSearchResult<Clotch>> Get1([FromQuery] string name)
+	{
+
+		return new OutputSearchResult<Clotch>(clotch);
 	}
 
 	[HttpGet]
-	public async Task<Clotch?> GetClotchByName(string name)
+	[ProducesResponseType(typeof(OutputSearchResult<Clotch>), StatusCodes.Status200OK)]
+	public async Task<OutputSearchResult<Clotch>> Get2([FromQuery] string type)
 	{
-		var clotch = await _dbContext.Clotches.FirstOrDefaultAsync(c => c.Name == name);
-		return clotch;
-	}
-
-	[HttpGet]
-	public async Task<Clotch?> GetClotchByType(string type)
-	{
-		var clotch = await _dbContext.Clotches.FirstOrDefaultAsync(c => c.Type == type);
-		return clotch;
-	}
+		var
+		return new OutputSearchResult<Clotch>(clotch);
+	}*/
 }
