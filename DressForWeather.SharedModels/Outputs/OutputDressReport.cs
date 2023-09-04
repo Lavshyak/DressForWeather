@@ -9,7 +9,7 @@ public class OutputDressReport
 	/// <summary>
 	///     одежда
 	/// </summary>
-	public required List<long> ClothesIds { get; set; }
+	public required List<OutputClotch> Clothes { get; set; }
 
 	/// <summary>
 	///     пользователь, который оставляет этот отзыв

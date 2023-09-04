@@ -1,3 +1,4 @@
+using AutoMapper;
 using DressForWeather.SharedModels.Inputs;
 using DressForWeather.SharedModels.Outputs;
 using DressForWeather.WebAPI.BackendModels.EFCoreModels;
@@ -15,13 +16,20 @@ public class DressReportController : ControllerBaseWithRouteToController
 {
 	private readonly IMainDbContext _mainDbContext;
 	private readonly UserManager<User> _userManager;
+	private readonly IMapper _mapper;
 
-	public DressReportController(IMainDbContext mainDbContext, UserManager<User> userManager)
+	public DressReportController(IMainDbContext mainDbContext, UserManager<User> userManager, IMapper mapper)
 	{
 		_mainDbContext = mainDbContext;
 		_userManager = userManager;
+		_mapper = mapper;
 	}
 
+	/// <summary>
+	/// Добавить отчет о комфорте в определенной одежде в определенную погоду
+	/// </summary>
+	/// <param name="inputDressReport">Отчет</param>
+	/// <returns>Идентификатор отчета</returns>
 	[HttpPost]
 	[ProducesResponseType(typeof(long), StatusCodes.Status201Created)]
 	public async Task<long> Set(InputDressReport inputDressReport)
@@ -40,11 +48,21 @@ public class DressReportController : ControllerBaseWithRouteToController
 		return dressReport.Entity.Id;
 	}
 
+	/// <summary>
+	/// Получить отчет о комфорте в определенной одежде в определенную погоду
+	/// </summary>
+	/// <param name="id">Идентификатор отчета</param>
+	/// <returns>Результат поиска отчета</returns>
 	[HttpGet]
 	[ProducesResponseType(typeof(OutputSearchResult<DressReport>), StatusCodes.Status200OK)]
-	public async Task<OutputSearchResult<DressReport>> Get(long id)
+	public async Task<OutputSearchResult<OutputDressReport>> Get(long id)
 	{
 		var report = await _mainDbContext.DressReports.FirstOrDefaultAsync(dr => dr.Id == id);
-		return new OutputSearchResult<DressReport>(report);
+
+		if (report is null)
+			return new OutputSearchResult<OutputDressReport>(null);
+		
+		
+		return new OutputSearchResult<OutputDressReport>(_mapper.Map<OutputDressReport>(report));
 	}
 }

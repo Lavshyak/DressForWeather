@@ -21,6 +21,11 @@ public class AuthorizeController : ControllerBaseWithRouteToAction
 		_signInManager = signInManager;
 	}
 
+	/// <summary>
+	/// Вход в аккаунт
+	/// </summary>
+	/// <param name="parameters">Параметры для входа</param>
+	/// <returns>OK с заголовком Set-Cookie или BadRequest с описанием проблемы</returns>
 	[AllowAnonymous]
 	[HttpPost]
 	[ProducesResponseType(typeof(string),StatusCodes.Status400BadRequest)]
@@ -37,6 +42,11 @@ public class AuthorizeController : ControllerBaseWithRouteToAction
 	}
 
 
+	/// <summary>
+	/// Регистрация
+	/// </summary>
+	/// <param name="parameters">параметры для регистрации</param>
+	/// <returns>OK с заголовком Set-Cookie или BadRequest с описанием проблемы</returns>
 	[AllowAnonymous]
 	[HttpPost]
 	[ProducesResponseType(typeof(string),StatusCodes.Status400BadRequest)]
@@ -50,7 +60,7 @@ public class AuthorizeController : ControllerBaseWithRouteToAction
 		var result = await _userManager.CreateAsync(user, parameters.Password);
 		if (!result.Succeeded) return BadRequest(result.Errors.FirstOrDefault()?.Description);
 
-		//добавляет юзеру роль newReg
+		//добавляет пользователю роль "User"
 		await _userManager.AddToRoleAsync(user, "User");
 
 		return await Login(new LoginParameters
@@ -60,6 +70,10 @@ public class AuthorizeController : ControllerBaseWithRouteToAction
 		});
 	}
 
+	/// <summary>
+	/// Выход из аккаунта
+	/// </summary>
+	/// <returns>Ok</returns>
 	[HttpGet]
 	[ProducesResponseType(StatusCodes.Status200OK)]
 	[ProducesResponseType(StatusCodes.Status401Unauthorized)]

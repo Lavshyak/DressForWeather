@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using DressForWeather.SharedModels;
+using DressForWeather.SharedModels.Outputs;
 
 namespace DressForWeather.WebAPI.BackendModels.EFCoreModels;
 

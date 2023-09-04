@@ -99,12 +99,14 @@ public static class StartupExtensions
 				_ = dbProvider
 					switch
 					{
-						//сделано: dotnet ef migrations add InitialCreate --project ../DressForWeather.WebAPI.PostgreMigrations -- --provider Postgre
+						//комментарии эти 2 не читать)
+						//сделано: dotnet ef migrations add SomeUpdates --project DressForWeather.WebAPI.PostgreMigrations -- --provider Postgre
 						//потом: dotnet ef database update
 						DbProviders.Postgre => options.UseNpgsql(
 							configuration.GetConnectionStringForDbContext(dbProvider,
 								MainDbContext.ContextName),
 							x => x.MigrationsAssembly(GetMigrationsAssemblyNameFor(dbProvider))),
+																									//DressForWeather.WebAPI.PostgreMigrations
 
 						//если перейдем на другую базу данных, то нужно сделать действия, аналогичные строке выше
 
@@ -119,6 +121,8 @@ public static class StartupExtensions
 
 		services.AddAuthorization();
 		services.AddManualAuthorization();
+
+		services.AddAutoMapper(typeof(AppMappingProfile));
 	}
 
 	

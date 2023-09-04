@@ -1,3 +1,4 @@
+using AutoMapper;
 using DressForWeather.SharedModels.Inputs;
 using DressForWeather.SharedModels.Outputs;
 using DressForWeather.WebAPI.BackendModels.EFCoreModels;
@@ -13,17 +14,19 @@ namespace DressForWeather.WebAPI.Controllers;
 public class ClotchController : ControllerBaseWithRouteToController
 {
 	private readonly IMainDbContext _dbContext;
+	private readonly IMapper _mapper;
 
-	public ClotchController(MainDbContext db)
+	public ClotchController(MainDbContext db, IMapper mapper)
 	{
 		_dbContext = db;
+		_mapper = mapper;
 	}
 
 	/// <summary>
-	///     Add clotch to data base
+	/// Добавляет предмет одежды в базу данных
 	/// </summary>
-	/// <param name="inputClotch"></param>
-	/// <returns>Id of added clotch</returns>
+	/// <param name="inputClotch">Информация о предмете одежды</param>
+	/// <returns>Id добавленной одежды</returns>
 	[HttpPost]
 	[ProducesResponseType(typeof(long), StatusCodes.Status201Created)]
 	public async Task<long> Set(InputClotch inputClotch)
@@ -37,41 +40,47 @@ public class ClotchController : ControllerBaseWithRouteToController
 		return clotch.Entity.Id;
 	}
 
+	/// <summary>
+	/// Получить первую попавшуюся информацию о предмете одежды
+	/// </summary>
+	/// <param name="id">если указано, ищет по идентификатору</param>
+	/// <param name="name">если указано, ищет по названию</param>
+	/// <param name="type">если указано, ищет по типу</param>
+	/// <returns>Результат поиска. Если найдено, то в нем будет информация о предмете одежды</returns>
 	[HttpGet]
-	[ProducesResponseType(typeof(OutputSearchResult<Clotch>), StatusCodes.Status200OK)]
-	public async Task<OutputSearchResult<Clotch>> Get([FromQuery] long? id = null, [FromQuery] string? name = null,
+	[ProducesResponseType(typeof(OutputSearchResult<OutputClotch>), StatusCodes.Status200OK)]
+	public async Task<OutputSearchResult<OutputClotch>> Get([FromQuery] long? id = null,
+		[FromQuery] string? name = null,
 		[FromQuery] string? type = null)
 	{
 		Clotch? clotch = null;
-		if (id != null)
+		if (id is not null)
 		{
 			clotch = await _dbContext.Clotches.FirstOrDefaultAsync(c => c.Id == id);
 		}
-		else if (name != null)
+		else if (name is not null)
 		{
 			clotch = await _dbContext.Clotches.FirstOrDefaultAsync(c => c.Name == name);
 		}
-		else if (type != null)
+		else if (type is not null)
 		{
 			clotch = await _dbContext.Clotches.FirstOrDefaultAsync(c => c.Type == type);
 		}
 
-		return new OutputSearchResult<Clotch>(clotch);
+		if (clotch is null)
+		{
+			return new OutputSearchResult<OutputClotch>(null);
+		}
+
+		/*var output = new OutputClotch()
+		{
+			Id = clotch.Id, Name = clotch.Name, Type = clotch.Type,
+			ClotchParameters = clotch.ClotchParameters.Select(p => new OutputClotchParameterPair()
+			{
+				Id = p.Id, Key = p.Key, Value = p.Value
+			}).ToList()
+		};*/
+
+		return new OutputSearchResult<OutputClotch>(_mapper.Map<OutputClotch>(clotch));
 	}
-
-	/*[HttpGet]
-	[ProducesResponseType(typeof(OutputSearchResult<Clotch>), StatusCodes.Status200OK)]
-	public async Task<OutputSearchResult<Clotch>> Get1([FromQuery] string name)
-	{
-
-		return new OutputSearchResult<Clotch>(clotch);
-	}
-
-	[HttpGet]
-	[ProducesResponseType(typeof(OutputSearchResult<Clotch>), StatusCodes.Status200OK)]
-	public async Task<OutputSearchResult<Clotch>> Get2([FromQuery] string type)
-	{
-		var
-		return new OutputSearchResult<Clotch>(clotch);
-	}*/
 }

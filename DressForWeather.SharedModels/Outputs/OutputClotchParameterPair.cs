@@ -2,7 +2,7 @@ namespace DressForWeather.SharedModels.Outputs;
 
 public class OutputClotchParameterPair
 {
-	public required int Id { get; set; }
+	public required long Id { get; set; }
 
 	public required string Key { get; set; }
 
