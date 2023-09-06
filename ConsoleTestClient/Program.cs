@@ -5,8 +5,8 @@ namespace ConsoleTestClient;
 
 internal static class Program
 {
-	private static HttpClient _httpClient = new HttpClient();
-	private static string _baseUrl = "https://localhost:44371";
+	private static readonly HttpClient _httpClient = new();
+	private static readonly string _baseUrl = "https://localhost:44371";
 
 	private static async Task Main()
 	{
@@ -15,11 +15,10 @@ internal static class Program
 
 	public static async Task Register()
 	{
-		var regParams = new RegisterParameters()
+		var regParams = new RegisterParameters
 		{
 			UserName = "Test1",
-			Password = "1234",
-			PasswordConfirm = "1234"
+			Password = "1234"
 		};
 
 		HttpResponseMessage httpResponseMessage;
@@ -35,10 +34,6 @@ internal static class Program
 			throw;
 		}
 
-		if (!httpResponseMessage.IsSuccessStatusCode)
-		{
-			throw new Exception("IsSuccessStatusCode=false");
-		}
-		
+		if (!httpResponseMessage.IsSuccessStatusCode) throw new Exception("IsSuccessStatusCode=false");
 	}
 }

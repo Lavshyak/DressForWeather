@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DressForWeather.WebAPI.PostgreMigrations.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -51,19 +51,6 @@ namespace DressForWeather.WebAPI.PostgreMigrations.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ClothTypes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ClothTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -190,51 +177,11 @@ namespace DressForWeather.WebAPI.PostgreMigrations.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClothesSets",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    CreatorId = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ClothesSets", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ClothesSets_AspNetUsers_CreatorId",
-                        column: x => x.CreatorId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Clotches",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Type = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    ClothesSetId = table.Column<long>(type: "bigint", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Clotches", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Clotches_ClothesSets_ClothesSetId",
-                        column: x => x.ClothesSetId,
-                        principalTable: "ClothesSets",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "DressReports",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ClothesSetId = table.Column<long>(type: "bigint", nullable: false),
                     UserReporterId = table.Column<long>(type: "bigint", nullable: false),
                     WeatherStateId = table.Column<long>(type: "bigint", nullable: false),
                     Feeling = table.Column<float>(type: "real", nullable: false)
@@ -249,12 +196,6 @@ namespace DressForWeather.WebAPI.PostgreMigrations.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DressReports_ClothesSets_ClothesSetId",
-                        column: x => x.ClothesSetId,
-                        principalTable: "ClothesSets",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_DressReports_WeatherStates_WeatherStateId",
                         column: x => x.WeatherStateId,
                         principalTable: "WeatherStates",
@@ -263,20 +204,40 @@ namespace DressForWeather.WebAPI.PostgreMigrations.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClotchesParameterPairs",
+                name: "Clotches",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    First = table.Column<string>(type: "text", nullable: false),
-                    Second = table.Column<string>(type: "text", nullable: false),
+                    Type = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    DressReportId = table.Column<long>(type: "bigint", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Clotches", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Clotches_DressReports_DressReportId",
+                        column: x => x.DressReportId,
+                        principalTable: "DressReports",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ClotchParameterPairs",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Key = table.Column<string>(type: "text", nullable: false),
+                    Value = table.Column<string>(type: "text", nullable: false),
                     ClotchId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClotchesParameterPairs", x => x.Id);
+                    table.PrimaryKey("PK_ClotchParameterPairs", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ClotchesParameterPairs_Clotches_ClotchId",
+                        name: "FK_ClotchParameterPairs_Clotches_ClotchId",
                         column: x => x.ClotchId,
                         principalTable: "Clotches",
                         principalColumn: "Id");
@@ -320,24 +281,14 @@ namespace DressForWeather.WebAPI.PostgreMigrations.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Clotches_ClothesSetId",
+                name: "IX_Clotches_DressReportId",
                 table: "Clotches",
-                column: "ClothesSetId");
+                column: "DressReportId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClotchesParameterPairs_ClotchId",
-                table: "ClotchesParameterPairs",
+                name: "IX_ClotchParameterPairs_ClotchId",
+                table: "ClotchParameterPairs",
                 column: "ClotchId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ClothesSets_CreatorId",
-                table: "ClothesSets",
-                column: "CreatorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DressReports_ClothesSetId",
-                table: "DressReports",
-                column: "ClothesSetId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DressReports_UserReporterId",
@@ -369,13 +320,7 @@ namespace DressForWeather.WebAPI.PostgreMigrations.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "ClotchesParameterPairs");
-
-            migrationBuilder.DropTable(
-                name: "ClothTypes");
-
-            migrationBuilder.DropTable(
-                name: "DressReports");
+                name: "ClotchParameterPairs");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -384,13 +329,13 @@ namespace DressForWeather.WebAPI.PostgreMigrations.Migrations
                 name: "Clotches");
 
             migrationBuilder.DropTable(
-                name: "WeatherStates");
-
-            migrationBuilder.DropTable(
-                name: "ClothesSets");
+                name: "DressReports");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "WeatherStates");
         }
     }
 }

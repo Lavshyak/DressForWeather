@@ -1,25 +1,25 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace DressForWeather.WebAPI.BackendModels.EFCoreModels;
+namespace DressForWeather.SharedModels.Outputs;
 
-public class DressReport
+public class OutputDressReport
 {
 	public long Id { get; set; }
 
 	/// <summary>
 	///     одежда
 	/// </summary>
-	public required List<Clotch> Clothes { get; set; }
+	public required List<long> ClothIds { get; set; }
 
 	/// <summary>
 	///     пользователь, который оставляет этот отзыв
 	/// </summary>
-	public required User UserReporter { get; set; }
+	public required long UserReporterId { get; set; }
 
 	/// <summary>
 	///     состояние погоды
 	/// </summary>
-	public required WeatherState WeatherState { get; set; }
+	public required long WeatherStateId { get; set; }
 
 	/// <summary>
 	///     -1 - смертельно холодно, +1 смертельно жарко. 0 - идеально

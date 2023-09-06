@@ -1,5 +1,3 @@
-using System.Security.Claims;
-using System.Security.Principal;
 using DressForWeather.SharedModels;
 using DressForWeather.WebAPI.BackendModels.EFCoreModels;
 using Microsoft.AspNetCore.Authorization;
@@ -9,19 +7,27 @@ using Microsoft.AspNetCore.Mvc;
 namespace DressForWeather.WebAPI.Controllers;
 
 [Authorize]
-public class AuthorizeController : ControllerBaseDressForWeather
+[ProducesErrorResponseType(typeof(string))]
+[ProducesResponseType(StatusCodes.Status200OK)]
+public class AuthorizeController : ControllerBaseWithRouteToAction
 {
-	private readonly UserManager<User> _userManager;
 	private readonly SignInManager<User> _signInManager;
-	
+	private readonly UserManager<User> _userManager;
+
 	public AuthorizeController(UserManager<User> userManager, SignInManager<User> signInManager)
 	{
 		_userManager = userManager;
 		_signInManager = signInManager;
 	}
 
+	/// <summary>
+	///     Вход в аккаунт
+	/// </summary>
+	/// <param name="parameters">Параметры для входа</param>
+	/// <returns>OK с заголовком Set-Cookie или BadRequest с описанием проблемы</returns>
 	[AllowAnonymous]
 	[HttpPost]
+	[ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
 	public async Task<IActionResult> Login(LoginParameters parameters)
 	{
 		var user = await _userManager.FindByNameAsync(parameters.UserName);
@@ -35,85 +41,43 @@ public class AuthorizeController : ControllerBaseDressForWeather
 	}
 
 
+	/// <summary>
+	///     Регистрация
+	/// </summary>
+	/// <param name="parameters">параметры для регистрации</param>
+	/// <returns>OK с заголовком Set-Cookie или BadRequest с описанием проблемы</returns>
 	[AllowAnonymous]
 	[HttpPost]
+	[ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
 	public async Task<IActionResult> Register(RegisterParameters parameters)
 	{
 		var user = new User
 		{
 			UserName = parameters.UserName
 		};
-		
-		var result = await _userManager.CreateAsync(user, parameters.Password); 
+
+		var result = await _userManager.CreateAsync(user, parameters.Password);
 		if (!result.Succeeded) return BadRequest(result.Errors.FirstOrDefault()?.Description);
 
-		//добавляет юзеру роль newReg
-		await _userManager.AddToRoleAsync(user, "newReg");
-		
+		//добавляет пользователю роль "User"
+		await _userManager.AddToRoleAsync(user, "User");
+
 		return await Login(new LoginParameters
 		{
 			UserName = parameters.UserName,
 			Password = parameters.Password
 		});
 	}
-	
-	[HttpPost]
+
+	/// <summary>
+	///     Выход из аккаунта
+	/// </summary>
+	/// <returns>Ok</returns>
+	[HttpGet]
+	[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 	public async Task<IActionResult> Logout()
 	{
 		await _signInManager.SignOutAsync();
 		return Ok();
 	}
-
-	[AllowAnonymous]
-	[HttpGet]
-	public UserInfo UserInfo()
-	{
-		//var user = await _userManager.GetUserAsync(HttpContext.User);
-		return BuildUserInfo();
-	}
-
-
-	private UserInfo BuildUserInfo()
-	{
-		return new UserInfo
-		{
-			IsAuthenticated = User.Identity?.IsAuthenticated ?? false,
-			UserName = User.Identity?.Name ?? "unknown",
-			ExposedClaims = User.Claims
-				//Optionally: filter the claims you want to expose to the client
-				//.Where(c => c.Type == "test-claim")
-				.ToDictionary(c => c.Type, c => c.Value)
-		};
-	}
-	
-	#if DEBUG
-
-	[HttpGet]
-	public bool IsNewReg()
-	{
-		HttpContext.User.Identities.First().AddClaim(new Claim(ClaimTypes.Role, "newReg"));
-		return User.IsInRole("newReg");
-	}
-	
-	[Authorize(Roles = "newReg")]
-	[HttpPost]
-	public Task<IActionResult> NewRegTest()
-	{
-		Console.WriteLine("newReg succes");
-		return new Task<IActionResult>(Ok);
-	}
-
-	[AllowAnonymous]
-	[HttpPost]
-	public async Task<IActionResult> DebugLogiAndGetInfo(LoginParameters parameters)
-	{
-		var user = await _userManager.FindByNameAsync(parameters.UserName);
-		if (user == null) return BadRequest("User does not exist");
-		var singInResult = await _signInManager.CheckPasswordSignInAsync(user, parameters.Password, false);
-		if (!singInResult.Succeeded) return BadRequest("Invalid password");
-
-		await _signInManager.SignInAsync(user, parameters.RememberMe);
-		return new JsonResult(BuildUserInfo());
-	}
-	#endif
 }

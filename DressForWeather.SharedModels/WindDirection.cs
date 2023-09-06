@@ -1,7 +1,7 @@
-namespace DressForWeather.WebAPI.BackendModels;
+namespace DressForWeather.SharedModels;
 
 /// <summary>
-/// Направление ветра
+///     Направление ветра
 /// </summary>
 public enum WindDirection
 {
