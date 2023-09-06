@@ -3,7 +3,6 @@ using DressForWeather.WebAPI.BackendModels.EFCoreModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace DressForWeather.WebAPI.Controllers;
 
@@ -22,13 +21,13 @@ public class AuthorizeController : ControllerBaseWithRouteToAction
 	}
 
 	/// <summary>
-	/// Вход в аккаунт
+	///     Вход в аккаунт
 	/// </summary>
 	/// <param name="parameters">Параметры для входа</param>
 	/// <returns>OK с заголовком Set-Cookie или BadRequest с описанием проблемы</returns>
 	[AllowAnonymous]
 	[HttpPost]
-	[ProducesResponseType(typeof(string),StatusCodes.Status400BadRequest)]
+	[ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
 	public async Task<IActionResult> Login(LoginParameters parameters)
 	{
 		var user = await _userManager.FindByNameAsync(parameters.UserName);
@@ -43,13 +42,13 @@ public class AuthorizeController : ControllerBaseWithRouteToAction
 
 
 	/// <summary>
-	/// Регистрация
+	///     Регистрация
 	/// </summary>
 	/// <param name="parameters">параметры для регистрации</param>
 	/// <returns>OK с заголовком Set-Cookie или BadRequest с описанием проблемы</returns>
 	[AllowAnonymous]
 	[HttpPost]
-	[ProducesResponseType(typeof(string),StatusCodes.Status400BadRequest)]
+	[ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
 	public async Task<IActionResult> Register(RegisterParameters parameters)
 	{
 		var user = new User
@@ -71,11 +70,10 @@ public class AuthorizeController : ControllerBaseWithRouteToAction
 	}
 
 	/// <summary>
-	/// Выход из аккаунта
+	///     Выход из аккаунта
 	/// </summary>
 	/// <returns>Ok</returns>
 	[HttpGet]
-	[ProducesResponseType(StatusCodes.Status200OK)]
 	[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 	public async Task<IActionResult> Logout()
 	{

@@ -9,7 +9,7 @@ public class OutputDressReport
 	/// <summary>
 	///     одежда
 	/// </summary>
-	public required List<OutputClotch> Clothes { get; set; }
+	public required List<long> ClothIds { get; set; }
 
 	/// <summary>
 	///     пользователь, который оставляет этот отзыв
@@ -19,7 +19,7 @@ public class OutputDressReport
 	/// <summary>
 	///     состояние погоды
 	/// </summary>
-	public required OutputWeatherState OutputWeatherState { get; set; }
+	public required long WeatherStateId { get; set; }
 
 	/// <summary>
 	///     -1 - смертельно холодно, +1 смертельно жарко. 0 - идеально

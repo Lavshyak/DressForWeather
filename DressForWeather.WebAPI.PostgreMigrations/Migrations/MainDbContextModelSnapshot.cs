@@ -17,7 +17,7 @@ namespace DressForWeather.WebAPI.PostgreMigrations.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.7")
+                .HasAnnotation("ProductVersion", "7.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -30,7 +30,7 @@ namespace DressForWeather.WebAPI.PostgreMigrations.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<long?>("ClothesSetId")
+                    b.Property<long?>("DressReportId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
@@ -43,55 +43,12 @@ namespace DressForWeather.WebAPI.PostgreMigrations.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClothesSetId");
+                    b.HasIndex("DressReportId");
 
                     b.ToTable("Clotches");
                 });
 
             modelBuilder.Entity("DressForWeather.WebAPI.BackendModels.EFCoreModels.ClotchParameterPair", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<long?>("ClotchId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("First")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Second")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClotchId");
-
-                    b.ToTable("ClotchesParameterPairs");
-                });
-
-            modelBuilder.Entity("DressForWeather.WebAPI.BackendModels.EFCoreModels.ClothType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ClothTypes");
-                });
-
-            modelBuilder.Entity("DressForWeather.WebAPI.BackendModels.EFCoreModels.ClothesSet", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -99,14 +56,22 @@ namespace DressForWeather.WebAPI.PostgreMigrations.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<long>("CreatorId")
+                    b.Property<long?>("ClotchId")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatorId");
+                    b.HasIndex("ClotchId");
 
-                    b.ToTable("ClothesSets");
+                    b.ToTable("ClotchParameterPairs");
                 });
 
             modelBuilder.Entity("DressForWeather.WebAPI.BackendModels.EFCoreModels.DressReport", b =>
@@ -116,9 +81,6 @@ namespace DressForWeather.WebAPI.PostgreMigrations.Migrations
                         .HasColumnType("bigint");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<long>("ClothesSetId")
-                        .HasColumnType("bigint");
 
                     b.Property<float>("Feeling")
                         .HasColumnType("real");
@@ -130,8 +92,6 @@ namespace DressForWeather.WebAPI.PostgreMigrations.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ClothesSetId");
 
                     b.HasIndex("UserReporterId");
 
@@ -369,9 +329,9 @@ namespace DressForWeather.WebAPI.PostgreMigrations.Migrations
 
             modelBuilder.Entity("DressForWeather.WebAPI.BackendModels.EFCoreModels.Clotch", b =>
                 {
-                    b.HasOne("DressForWeather.WebAPI.BackendModels.EFCoreModels.ClothesSet", null)
-                        .WithMany("Clotches")
-                        .HasForeignKey("ClothesSetId");
+                    b.HasOne("DressForWeather.WebAPI.BackendModels.EFCoreModels.DressReport", null)
+                        .WithMany("Clothes")
+                        .HasForeignKey("DressReportId");
                 });
 
             modelBuilder.Entity("DressForWeather.WebAPI.BackendModels.EFCoreModels.ClotchParameterPair", b =>
@@ -381,25 +341,8 @@ namespace DressForWeather.WebAPI.PostgreMigrations.Migrations
                         .HasForeignKey("ClotchId");
                 });
 
-            modelBuilder.Entity("DressForWeather.WebAPI.BackendModels.EFCoreModels.ClothesSet", b =>
-                {
-                    b.HasOne("DressForWeather.WebAPI.BackendModels.EFCoreModels.User", "Creator")
-                        .WithMany()
-                        .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Creator");
-                });
-
             modelBuilder.Entity("DressForWeather.WebAPI.BackendModels.EFCoreModels.DressReport", b =>
                 {
-                    b.HasOne("DressForWeather.WebAPI.BackendModels.EFCoreModels.ClothesSet", "ClothesSet")
-                        .WithMany()
-                        .HasForeignKey("ClothesSetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("DressForWeather.WebAPI.BackendModels.EFCoreModels.User", "UserReporter")
                         .WithMany()
                         .HasForeignKey("UserReporterId")
@@ -411,8 +354,6 @@ namespace DressForWeather.WebAPI.PostgreMigrations.Migrations
                         .HasForeignKey("WeatherStateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("ClothesSet");
 
                     b.Navigation("UserReporter");
 
@@ -475,9 +416,9 @@ namespace DressForWeather.WebAPI.PostgreMigrations.Migrations
                     b.Navigation("ClotchParameters");
                 });
 
-            modelBuilder.Entity("DressForWeather.WebAPI.BackendModels.EFCoreModels.ClothesSet", b =>
+            modelBuilder.Entity("DressForWeather.WebAPI.BackendModels.EFCoreModels.DressReport", b =>
                 {
-                    b.Navigation("Clotches");
+                    b.Navigation("Clothes");
                 });
 #pragma warning restore 612, 618
         }

@@ -6,5 +6,5 @@ public class InputClotch
 
 	public required string Name { get; set; }
 
-	public required List<long> ClotchParametersIds { get; set; } = new();
+	public required IEnumerable<long> ClotchParametersIds { get; set; }
 }

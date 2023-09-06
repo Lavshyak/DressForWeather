@@ -1,4 +1,7 @@
 using DressForWeather.WebAPI;
+#if LAUNCH_DEBUGGER
+System.Diagnostics.Debugger.Launch();
+#endif
 
 var builder = WebApplication.CreateBuilder(args);
 builder.ConfigureServices();
@@ -10,4 +13,6 @@ app.Run();
 
 // For Tests
 // ReSharper disable once ClassNeverInstantiated.Global
-public partial class Program { }
+public partial class Program
+{
+}

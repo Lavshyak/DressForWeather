@@ -15,16 +15,16 @@ public class MainDbContext : IdentityDbContext<User, IdentityRole<long>, long>, 
 
 	/*
 	 public virtual DbSet<(User)TUser> Users { get; set; } = default!; //IdentityDbContext-> IdentityDbContext -> IdentityUserContext.Users
-	 
+
 	 from IdentityDbContext-> IdentityDbContext:
 	 public virtual DbSet<TUserClaim> UserClaims { get; set; } = default!;
 	 public virtual DbSet<TUserLogin> UserLogins { get; set; } = default!;
 	 public virtual DbSet<TUserToken> UserTokens { get; set; } = default!;
 	*/
 
-	public DbSet<Clotch> Clotches { get; } = default!;
-	public DbSet<ClotchParameterPair> ClotchesParameterPairs { get; protected set; } = default!;
-	public DbSet<DressReport> DressReports { get; } = default!;
+	public DbSet<Clotch> Clotches { get; protected set; } = default!;
+	public DbSet<ClotchParameterPair> ClotchParameterPairs { get; protected set; } = default!;
+	public DbSet<DressReport> DressReports { get; protected set; } = default!;
 
-	public DbSet<WeatherState> WeatherStates { get; } = default!;
+	public DbSet<WeatherState> WeatherStates { get; protected set; } = default!;
 }

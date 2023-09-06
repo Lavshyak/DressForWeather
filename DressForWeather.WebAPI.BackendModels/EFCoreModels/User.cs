@@ -4,9 +4,9 @@ namespace DressForWeather.WebAPI.BackendModels.EFCoreModels;
 
 public class User : IdentityUser<long>
 {
-	/* 
+	/*
 	 * from IdentityUser:
-	 * 
+	 *
 	 * public virtual <long>  Id { get; set; } = default!;
 	 * public virtual string? UserName { get; set; }
 	 * public virtual string? NormalizedUserName { get; set; }
@@ -22,7 +22,7 @@ public class User : IdentityUser<long>
 	 * public virtual DateTimeOffset? LockoutEnd { get; set; }
 	 * public virtual bool    LockoutEnabled { get; set; }
 	 * public virtual int     AccessFailedCount { get; set; }
-	 * 
+	 *
 	 * public override string ToString() => UserName ?? string.Empty;
 	 */
 }

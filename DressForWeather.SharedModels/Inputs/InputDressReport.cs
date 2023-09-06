@@ -7,7 +7,7 @@ public class InputDressReport
 	/// <summary>
 	///     одежда
 	/// </summary>
-	public required List<long> ClothIds { get; set; }
+	public required IEnumerable<long> ClothIds { get; set; }
 
 	/// <summary>
 	///     id состояния погоды

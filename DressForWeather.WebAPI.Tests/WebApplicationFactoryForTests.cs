@@ -5,7 +5,7 @@ using Microsoft.Extensions.Hosting;
 namespace DressForWeather.WebAPI.Tests;
 
 // ReSharper disable once ClassNeverInstantiated.Global
-public class CustomWebApplicationFactory : WebApplicationFactory<Program>
+public class WebApplicationFactoryForTests : WebApplicationFactory<Program>
 {
 	protected override void ConfigureWebHost(IWebHostBuilder builder)
 	{

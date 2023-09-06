@@ -7,22 +7,22 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoMapper" Version="12.0.1" />
-        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.7" />
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.7" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.7">
+        <PackageReference Include="AutoMapper" Version="12.0.1"/>
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1"/>
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.7"/>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.0"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.10"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.10">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\DressForWeather.SharedModels\DressForWeather.SharedModels.csproj" />
-        <ProjectReference Include="..\DressForWeather.WebAPI.DbContexts\DressForWeather.WebAPI.DbContexts.csproj" />
-        <ProjectReference Include="..\DressForWeather.WebAPI.PostgreMigrations\DressForWeather.WebAPI.PostgreMigrations.csproj" />
+        <ProjectReference Include="..\DressForWeather.SharedModels\DressForWeather.SharedModels.csproj"/>
+        <ProjectReference Include="..\DressForWeather.WebAPI.DbContexts\DressForWeather.WebAPI.DbContexts.csproj"/>
+        <ProjectReference Include="..\DressForWeather.WebAPI.PostgreMigrations\DressForWeather.WebAPI.PostgreMigrations.csproj"/>
     </ItemGroup>
 
 </Project>

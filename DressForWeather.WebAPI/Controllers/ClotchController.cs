@@ -13,7 +13,7 @@ namespace DressForWeather.WebAPI.Controllers;
 [ProducesResponseType(StatusCodes.Status401Unauthorized)]
 public class ClotchController : ControllerBaseWithRouteToController
 {
-	private readonly IMainDbContext _dbContext;
+	private readonly MainDbContext _dbContext;
 	private readonly IMapper _mapper;
 
 	public ClotchController(MainDbContext db, IMapper mapper)
@@ -23,25 +23,28 @@ public class ClotchController : ControllerBaseWithRouteToController
 	}
 
 	/// <summary>
-	/// Добавляет предмет одежды в базу данных
+	///     Добавляет предмет одежды в базу данных
 	/// </summary>
 	/// <param name="inputClotch">Информация о предмете одежды</param>
 	/// <returns>Id добавленной одежды</returns>
 	[HttpPost]
-	[ProducesResponseType(typeof(long), StatusCodes.Status201Created)]
+	[ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
 	public async Task<long> Set(InputClotch inputClotch)
 	{
 		var clotchParameters =
-			await _dbContext.ClotchesParameterPairs.Where(p =>
+			await _dbContext.ClotchParameterPairs.Where(p =>
 				inputClotch.ClotchParametersIds.Contains(p.Id)).ToListAsync();
 
 		var clotch = await _dbContext.Clotches.AddAsync(new Clotch
 			{ClotchParameters = clotchParameters, Name = inputClotch.Name, Type = inputClotch.Type});
+
+		await _dbContext.SaveChangesAsync();
+
 		return clotch.Entity.Id;
 	}
 
 	/// <summary>
-	/// Получить первую попавшуюся информацию о предмете одежды
+	///     Получить первую попавшуюся информацию о предмете одежды
 	/// </summary>
 	/// <param name="id">если указано, ищет по идентификатору</param>
 	/// <param name="name">если указано, ищет по названию</param>
@@ -54,23 +57,16 @@ public class ClotchController : ControllerBaseWithRouteToController
 		[FromQuery] string? type = null)
 	{
 		Clotch? clotch = null;
-		if (id is not null)
-		{
-			clotch = await _dbContext.Clotches.FirstOrDefaultAsync(c => c.Id == id);
-		}
-		else if (name is not null)
-		{
-			clotch = await _dbContext.Clotches.FirstOrDefaultAsync(c => c.Name == name);
-		}
-		else if (type is not null)
-		{
-			clotch = await _dbContext.Clotches.FirstOrDefaultAsync(c => c.Type == type);
-		}
 
-		if (clotch is null)
-		{
-			return new OutputSearchResult<OutputClotch>(null);
-		}
+		var withInclude = _dbContext.Clotches.Include(c => c.ClotchParameters);
+
+		if (id is not null)
+			clotch = await withInclude.FirstOrDefaultAsync(c => c.Id == id);
+		else if (name is not null)
+			clotch = await withInclude.FirstOrDefaultAsync(c => c.Name == name);
+		else if (type is not null) clotch = await withInclude.FirstOrDefaultAsync(c => c.Type == type);
+
+		if (clotch is null) return new OutputSearchResult<OutputClotch>(null);
 
 		/*var output = new OutputClotch()
 		{

@@ -12,17 +12,17 @@ namespace DressForWeather.WebAPI.Controllers;
 [Authorize]
 public class WeatherController : ControllerBaseWithRouteToController
 {
-	private readonly IMainDbContext _dbContext;
+	private readonly MainDbContext _dbContext;
 	private readonly IMapper _mapper;
 
-	public WeatherController(ILogger<WeatherController> logger, IMainDbContext db, IMapper mapper)
+	public WeatherController(ILogger<WeatherController> logger, MainDbContext db, IMapper mapper)
 	{
 		_dbContext = db;
 		_mapper = mapper;
 	}
 
 	/// <summary>
-	/// Добавить информацию о погоде
+	///     Добавить информацию о погоде
 	/// </summary>
 	/// <param name="inputWeatherState">информация о погоде</param>
 	/// <returns>Идентификатор</returns>
@@ -38,11 +38,14 @@ public class WeatherController : ControllerBaseWithRouteToController
 			WindDirection = inputWeatherState.WindDirection,
 			WindSpeedMps = inputWeatherState.WindSpeedMps
 		});
+
+		await _dbContext.SaveChangesAsync();
+
 		return weatherState.Entity.Id;
 	}
 
 	/// <summary>
-	/// Получить информацию о погоде
+	///     Получить информацию о погоде
 	/// </summary>
 	/// <param name="id">Идентификатор информации о погоде</param>
 	/// <returns>Результат поиска</returns>
@@ -55,14 +58,13 @@ public class WeatherController : ControllerBaseWithRouteToController
 		OutputWeatherState? outputWeather = null;
 
 		if (weather != null)
-		{
-			outputWeather = new(){
-				HowSunny = weather.HowSunny, Humidity = weather.Humidity, Id = weather.Id, TemperatureCelsius = weather.TemperatureCelsius,
+			outputWeather = new OutputWeatherState
+			{
+				HowSunny = weather.HowSunny, Humidity = weather.Humidity, Id = weather.Id,
+				TemperatureCelsius = weather.TemperatureCelsius,
 				WindDirection = weather.WindDirection, WindSpeedMps = weather.WindSpeedMps
 			};
-		}
-		
+
 		return new OutputSearchResult<OutputWeatherState>(outputWeather);
 	}
-		
 }

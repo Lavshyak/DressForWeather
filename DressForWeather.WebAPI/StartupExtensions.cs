@@ -8,12 +8,12 @@ namespace DressForWeather.WebAPI;
 
 public static class StartupExtensions
 {
+	private static readonly string[] RequiredRoleNames = {"Admin", "User"};
+
 	private static void AddManualAuthorization(this IServiceCollection services)
 	{
 		services.AddIdentity<User, IdentityRole<long>>()
 			.AddEntityFrameworkStores<MainDbContext>();
-		//.AddRoles<IdentityRole>(); //попытался сделать это чтоб авторизация работала (работает без этого теперь),
-		//но ошибка рантайма, нужен еще какой-то сервис. может потом пригодится
 
 		services.Configure<IdentityOptions>(options =>
 		{
@@ -49,8 +49,8 @@ public static class StartupExtensions
 		// Configure the HTTP request pipeline.
 		//if (app.Environment.IsDevelopment())
 		//{
-			app.UseSwagger();
-			app.UseSwaggerUI();
+		app.UseSwagger();
+		app.UseSwaggerUI();
 		//}
 
 		app.UseHttpsRedirection();
@@ -62,18 +62,25 @@ public static class StartupExtensions
 
 		if (app.Environment.IsDevelopment())
 		{
-			app.Services.ClearDataBase().GetAwaiter().GetResult();
+			//app.Services.ClearDataBase().GetAwaiter().GetResult();
 		}
-		
+
 		app.Services.SynchronizeIdentityRoles().GetAwaiter().GetResult();
 	}
 
+	//не используется
 	private static async Task ClearDataBase(this IServiceProvider services)
 	{
 		using var scope = services.CreateScope();
-		var mainDbContext = scope.ServiceProvider.GetService<MainDbContext>()?? throw new Exception();
-		await mainDbContext.Database.EnsureDeletedAsync();
-		await mainDbContext.Database.EnsureCreatedAsync();
+		var mainDbContext = scope.ServiceProvider.GetService<MainDbContext>() ?? throw new Exception();
+		var contextType = typeof(MainDbContext);
+		var props = contextType.GetProperties().Where(p => p.PropertyType == typeof(DbSet<>));
+		foreach (var prop in props)
+		{
+			var task = (prop.GetValue(mainDbContext) as DbSet<object>)?.ExecuteDeleteAsync();
+			if (task is not null)
+				await task;
+		}
 	}
 
 	public static void ConfigureServices(this WebApplicationBuilder builder)
@@ -99,14 +106,37 @@ public static class StartupExtensions
 				_ = dbProvider
 					switch
 					{
-						//комментарии эти 2 не читать)
-						//сделано: dotnet ef migrations add SomeUpdates --project DressForWeather.WebAPI.PostgreMigrations -- --provider Postgre
-						//потом: dotnet ef database update
+						//для добавления миграции:
+						/*
+						 "C:\Program Files\dotnet\dotnet.exe" ef migrations add --project
+						 DressForWeather.WebAPI.PostgreMigrations\DressForWeather.WebAPI.PostgreMigrations.csproj
+						 --startup-project DressForWeather.WebAPI\DressForWeather.WebAPI.csproj
+						 --context DressForWeather.WebAPI.DbContexts.MainDbContext --configuration Debug MIGRATION_NAME
+						 --output-dir Migrations
+						 */
+
+						//для приминения миграции:
+						/*
+							для основной бд:
+						+R - Release
+						+P - Production
+							для тестовой бд:
+						+R - Debug
+						+P - Development
+					*/
+						/*
+						 "C:\Program Files\dotnet\dotnet.exe" ef database update --project
+						 DressForWeather.WebAPI.PostgreMigrations\DressForWeather.WebAPI.PostgreMigrations.csproj
+						 --startup-project DressForWeather.WebAPI\DressForWeather.WebAPI.csproj
+						 --context DressForWeather.WebAPI.DbContexts.MainDbContext
+						 --configuration +R MIGRATION_NAME
+						 -- --environment +P
+						 */
 						DbProviders.Postgre => options.UseNpgsql(
 							configuration.GetConnectionStringForDbContext(dbProvider,
 								MainDbContext.ContextName),
 							x => x.MigrationsAssembly(GetMigrationsAssemblyNameFor(dbProvider))),
-																									//DressForWeather.WebAPI.PostgreMigrations
+						//DressForWeather.WebAPI.PostgreMigrations
 
 						//если перейдем на другую базу данных, то нужно сделать действия, аналогичные строке выше
 
@@ -125,29 +155,23 @@ public static class StartupExtensions
 		services.AddAutoMapper(typeof(AppMappingProfile));
 	}
 
-	
-
-	private static readonly string[] RequiredRoleNames = {"Admin", "User"};
-
 	private static async Task SynchronizeIdentityRoles(this IServiceProvider serviceProvider)
 	{
 		using var scope = serviceProvider.CreateScope();
 		var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole<long>>>() ?? throw new Exception();
 		var existRoles = roleManager.Roles.ToArray();
 		var missingRoleNames = RequiredRoleNames.Where(rs => existRoles.All(r => r.Name != rs));
-		foreach (var roleName in missingRoleNames)
-		{
-			await roleManager.CreateAsync(new IdentityRole<long>(roleName));
-		}
+		foreach (var roleName in missingRoleNames) await roleManager.CreateAsync(new IdentityRole<long>(roleName));
 	}
 
 	private static string GetConnectionStringForDbContext(this ConfigurationManager configurationManager,
 		string providerName, string contextName, string? defaultString = null)
 	{
-		return configurationManager.GetConnectionString($"{providerName}{contextName}Connection")
-		       ?? defaultString
-		       ?? throw new Exception(
-			       $"connection string for {providerName} : {contextName} does not exists in configuration");
+		var connectionString = configurationManager.GetConnectionString($"{providerName}{contextName}Connection")
+		                       ?? defaultString
+		                       ?? throw new Exception(
+			                       $"connection string for {providerName} : {contextName} does not exists in configuration");
+		return connectionString;
 	}
 
 	private static string GetDbProviderNameFor(this ConfigurationManager configurationManager, string contextName,

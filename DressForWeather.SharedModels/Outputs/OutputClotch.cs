@@ -8,5 +8,5 @@ public class OutputClotch
 
 	public required string Name { get; set; }
 
-	public required List<OutputClotchParameterPair> ClotchParameters { get; set; } = new();
+	public required IEnumerable<long> ClotchParametersIds { get; set; }
 }
