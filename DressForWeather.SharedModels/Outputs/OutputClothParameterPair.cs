@@ -1,6 +1,6 @@
 namespace DressForWeather.SharedModels.Outputs;
 
-public class OutputClotchParameterPair
+public class OutputClothParameterPair
 {
 	public required long Id { get; set; }
 

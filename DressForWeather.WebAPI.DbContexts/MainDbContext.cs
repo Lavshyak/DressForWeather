@@ -22,8 +22,8 @@ public class MainDbContext : IdentityDbContext<User, IdentityRole<long>, long>, 
 	 public virtual DbSet<TUserToken> UserTokens { get; set; } = default!;
 	*/
 
-	public DbSet<Clotch> Clotches { get; protected set; } = default!;
-	public DbSet<ClotchParameterPair> ClotchParameterPairs { get; protected set; } = default!;
+	public DbSet<Cloth> Clotches { get; protected set; } = default!;
+	public DbSet<ClothParameterPair> ClotchParameterPairs { get; protected set; } = default!;
 	public DbSet<DressReport> DressReports { get; protected set; } = default!;
 
 	public DbSet<WeatherState> WeatherStates { get; protected set; } = default!;

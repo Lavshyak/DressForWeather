@@ -1,6 +1,6 @@
 namespace DressForWeather.SharedModels.Outputs;
 
-public class OutputClotch
+public class OutputCloth
 {
 	public required long Id { get; set; }
 

@@ -8,13 +8,14 @@ public class AppMappingProfile : Profile
 {
 	public AppMappingProfile()
 	{
-		CreateMap<Clotch, OutputClotch>().ForMember(
+		//теперь можно автоматически конвертировать Cloth в OutputCloth
+		CreateMap<Cloth, OutputCloth>().ForMember(
 			dest => dest.ClotchParametersIds,
 			opt => opt.MapFrom(
 				src => src.ClotchParameters.Select(p => p.Id)
 			)
 		);
-		CreateMap<ClotchParameterPair, OutputClotchParameterPair>();
+		CreateMap<ClothParameterPair, OutputClothParameterPair>();
 
 		CreateMap<DressReport, OutputDressReport>().ForMember(
 			dest => dest.UserReporterId,
@@ -30,8 +31,8 @@ public class AppMappingProfile : Profile
 
 		CreateMap<WeatherState, OutputWeatherState>();
 
-		/*CreateMap<InputClotch, Clotch>();
-		CreateMap<InputClotchParameterPair, ClotchParameterPair>();
+		/*CreateMap<InputCloth, Cloth>();
+		CreateMap<InputClothParameterPair, ClothParameterPair>();
 		CreateMap<InputDressReport, DressReport>();
 		CreateMap<InputWeatherState, WeatherState>();*/
 	}

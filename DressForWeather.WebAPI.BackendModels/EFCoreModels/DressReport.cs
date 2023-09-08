@@ -9,7 +9,7 @@ public class DressReport
 	/// <summary>
 	///     одежда
 	/// </summary>
-	public required List<Clotch> Clothes { get; set; }
+	public required List<Cloth> Clothes { get; set; }
 
 	/// <summary>
 	///     пользователь, который оставляет этот отзыв

@@ -22,7 +22,7 @@ namespace DressForWeather.WebAPI.PostgreMigrations.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("DressForWeather.WebAPI.BackendModels.EFCoreModels.Clotch", b =>
+            modelBuilder.Entity("DressForWeather.WebAPI.BackendModels.EFCoreModels.Cloth", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -48,7 +48,7 @@ namespace DressForWeather.WebAPI.PostgreMigrations.Migrations
                     b.ToTable("Clotches");
                 });
 
-            modelBuilder.Entity("DressForWeather.WebAPI.BackendModels.EFCoreModels.ClotchParameterPair", b =>
+            modelBuilder.Entity("DressForWeather.WebAPI.BackendModels.EFCoreModels.ClothParameterPair", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -327,16 +327,16 @@ namespace DressForWeather.WebAPI.PostgreMigrations.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("DressForWeather.WebAPI.BackendModels.EFCoreModels.Clotch", b =>
+            modelBuilder.Entity("DressForWeather.WebAPI.BackendModels.EFCoreModels.Cloth", b =>
                 {
                     b.HasOne("DressForWeather.WebAPI.BackendModels.EFCoreModels.DressReport", null)
                         .WithMany("Clothes")
                         .HasForeignKey("DressReportId");
                 });
 
-            modelBuilder.Entity("DressForWeather.WebAPI.BackendModels.EFCoreModels.ClotchParameterPair", b =>
+            modelBuilder.Entity("DressForWeather.WebAPI.BackendModels.EFCoreModels.ClothParameterPair", b =>
                 {
-                    b.HasOne("DressForWeather.WebAPI.BackendModels.EFCoreModels.Clotch", null)
+                    b.HasOne("DressForWeather.WebAPI.BackendModels.EFCoreModels.Cloth", null)
                         .WithMany("ClotchParameters")
                         .HasForeignKey("ClotchId");
                 });
@@ -411,7 +411,7 @@ namespace DressForWeather.WebAPI.PostgreMigrations.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DressForWeather.WebAPI.BackendModels.EFCoreModels.Clotch", b =>
+            modelBuilder.Entity("DressForWeather.WebAPI.BackendModels.EFCoreModels.Cloth", b =>
                 {
                     b.Navigation("ClotchParameters");
                 });

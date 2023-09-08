@@ -21,10 +21,11 @@ public class AuthorizeController : ControllerBaseWithRouteToAction
 	}
 
 	/// <summary>
-	///     Вход в аккаунт
+	///  Вход в аккаунт.
 	/// </summary>
 	/// <param name="parameters">Параметры для входа</param>
 	/// <returns>OK с заголовком Set-Cookie или BadRequest с описанием проблемы</returns>
+	// Пример адреса этого метода: https://localhost:4065/Authorize/Login
 	[AllowAnonymous]
 	[HttpPost]
 	[ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]

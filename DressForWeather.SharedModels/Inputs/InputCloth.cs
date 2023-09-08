@@ -1,6 +1,6 @@
 namespace DressForWeather.SharedModels.Inputs;
 
-public class InputClotch
+public class InputCloth
 {
 	public required string Type { get; set; }
 

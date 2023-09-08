@@ -2,8 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DressForWeather.WebAPI", "DressForWeather.WebAPI\DressForWeather.WebAPI.csproj", "{66C3E051-8C80-47CE-8A01-F2914D4A2B5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTestClient", "ConsoleTestClient\ConsoleTestClient.csproj", "{F5FC09E3-59FD-4ED6-92D7-DC4C50603E51}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DressForWeather.SharedModels", "DressForWeather.SharedModels\DressForWeather.SharedModels.csproj", "{6B2D514C-E735-436A-A1B2-EE0718E45C0D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DressForWeather.WebAPI.DbContexts", "DressForWeather.WebAPI.DbContexts\DressForWeather.WebAPI.DbContexts.csproj", "{26DE371D-EF9F-4529-80DF-A244B3EFFAFE}"
@@ -24,10 +22,6 @@ Global
 		{66C3E051-8C80-47CE-8A01-F2914D4A2B5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66C3E051-8C80-47CE-8A01-F2914D4A2B5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66C3E051-8C80-47CE-8A01-F2914D4A2B5A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F5FC09E3-59FD-4ED6-92D7-DC4C50603E51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F5FC09E3-59FD-4ED6-92D7-DC4C50603E51}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F5FC09E3-59FD-4ED6-92D7-DC4C50603E51}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F5FC09E3-59FD-4ED6-92D7-DC4C50603E51}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6B2D514C-E735-436A-A1B2-EE0718E45C0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6B2D514C-E735-436A-A1B2-EE0718E45C0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B2D514C-E735-436A-A1B2-EE0718E45C0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
