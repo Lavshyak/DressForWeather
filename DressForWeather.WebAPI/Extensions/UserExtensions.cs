@@ -5,6 +5,12 @@ namespace DressForWeather.WebAPI.Extensions;
 
 public static class ClaimsPrincipalExtensions
 {
+	/// <summary>
+	/// Получить идентификатор пользователя, представленного обьектом ClaimsPrincipal
+	/// </summary>
+	/// <param name="claimsPrincipal">User</param>
+	/// <returns>Id</returns>
+	/// <exception cref="ClaimValueIsNotValidException">Проблемы с Id пользователя</exception>
 	public static long GetId(this ClaimsPrincipal claimsPrincipal)
 	{
 		if (!long.TryParse(claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier), out var userId))

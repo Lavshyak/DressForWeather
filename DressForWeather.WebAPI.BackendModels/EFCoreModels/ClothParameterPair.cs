@@ -1,6 +1,6 @@
 namespace DressForWeather.WebAPI.BackendModels.EFCoreModels;
 
-public class ClotchParameterPair
+public class ClothParameterPair
 {
 	public long Id { get; set; }
 

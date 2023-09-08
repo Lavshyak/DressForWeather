@@ -11,12 +11,12 @@ namespace DressForWeather.WebAPI.Controllers;
 
 [Authorize]
 [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-public class ClotchParameterPairController : ControllerBaseWithRouteToController
+public class ClothParameterPairController : ControllerBaseWithRouteToController
 {
 	private readonly MainDbContext _dbContext;
 	private readonly IMapper _mapper;
 
-	public ClotchParameterPairController(MainDbContext db, IMapper mapper)
+	public ClothParameterPairController(MainDbContext db, IMapper mapper)
 	{
 		_dbContext = db;
 		_mapper = mapper;
@@ -25,14 +25,14 @@ public class ClotchParameterPairController : ControllerBaseWithRouteToController
 	/// <summary>
 	///     Добавляет предмет одежды в базу данных
 	/// </summary>
-	/// <param name="inputClotchParameterPair">Информация о предмете одежды</param>
+	/// <param name="inputClothParameterPair">Информация о предмете одежды</param>
 	/// <returns>Id добавленной одежды</returns>
 	[HttpPost]
 	[ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
-	public async Task<long> Set(InputClotchParameterPair inputClotchParameterPair)
+	public async Task<long> Set(InputClothParameterPair inputClothParameterPair)
 	{
-		var clotchParameterPair = await _dbContext.ClotchParameterPairs.AddAsync(new ClotchParameterPair
-			{Key = inputClotchParameterPair.Key, Value = inputClotchParameterPair.Value});
+		var clotchParameterPair = await _dbContext.ClotchParameterPairs.AddAsync(new ClothParameterPair
+			{Key = inputClothParameterPair.Key, Value = inputClothParameterPair.Value});
 		await _dbContext.SaveChangesAsync();
 		return clotchParameterPair.Entity.Id;
 	}
@@ -45,12 +45,12 @@ public class ClotchParameterPairController : ControllerBaseWithRouteToController
 	/// <param name="value">если указано, ищет по значению</param>
 	/// <returns>Результат поиска. Если найдено, то в нем будет информация о предмете одежды</returns>
 	[HttpGet]
-	[ProducesResponseType(typeof(OutputSearchResult<OutputClotchParameterPair>), StatusCodes.Status200OK)]
-	public async Task<OutputSearchResult<OutputClotchParameterPair>> Get([FromQuery] long? id = null,
+	[ProducesResponseType(typeof(OutputSearchResult<OutputClothParameterPair>), StatusCodes.Status200OK)]
+	public async Task<OutputSearchResult<OutputClothParameterPair>> Get([FromQuery] long? id = null,
 		[FromQuery] string? key = null,
 		[FromQuery] string? value = null)
 	{
-		ClotchParameterPair? clotchParameterPair = null;
+		ClothParameterPair? clotchParameterPair = null;
 		if (id is not null)
 			clotchParameterPair = await _dbContext.ClotchParameterPairs.FirstOrDefaultAsync(c => c.Id == id);
 		else if (key is not null)
@@ -59,8 +59,8 @@ public class ClotchParameterPairController : ControllerBaseWithRouteToController
 			clotchParameterPair = await _dbContext.ClotchParameterPairs.FirstOrDefaultAsync(c => c.Value == value);
 
 		return clotchParameterPair is null
-			? new OutputSearchResult<OutputClotchParameterPair>(null)
-			: new OutputSearchResult<OutputClotchParameterPair>(
-				_mapper.Map<OutputClotchParameterPair>(clotchParameterPair));
+			? new OutputSearchResult<OutputClothParameterPair>(null)
+			: new OutputSearchResult<OutputClothParameterPair>(
+				_mapper.Map<OutputClothParameterPair>(clotchParameterPair));
 	}
 }

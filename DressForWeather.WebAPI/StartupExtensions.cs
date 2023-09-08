@@ -8,10 +8,12 @@ namespace DressForWeather.WebAPI;
 
 public static class StartupExtensions
 {
+	//названия ролей, которе нужны серверу для авторизации. Пока используется только User
 	private static readonly string[] RequiredRoleNames = {"Admin", "User"};
 
 	private static void AddManualAuthorization(this IServiceCollection services)
 	{
+		//Identity реализует алгоритмы авторизации
 		services.AddIdentity<User, IdentityRole<long>>()
 			.AddEntityFrameworkStores<MainDbContext>();
 
@@ -47,17 +49,19 @@ public static class StartupExtensions
 	public static void ConfigureApp(this WebApplication app)
 	{
 		// Configure the HTTP request pipeline.
-		//if (app.Environment.IsDevelopment())
-		//{
-		app.UseSwagger();
-		app.UseSwaggerUI();
-		//}
+		if (app.Environment.IsDevelopment())
+		{
+			//"фронт" в браузере. в основном предназначен для интеграционного ручного тестирования API
+			app.UseSwagger();
+			app.UseSwaggerUI();
+		}
 
 		app.UseHttpsRedirection();
 
 		app.UseAuthentication();
 		app.UseAuthorization();
 
+		//добавить методы из контроллеров в API
 		app.MapControllers();
 
 		if (app.Environment.IsDevelopment())
@@ -92,12 +96,12 @@ public static class StartupExtensions
 	private static void ConfigureServices(IServiceCollection services, ConfigurationManager configuration)
 	{
 		// Add services to the container.
-
 		services.AddControllers();
 		// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 		services.AddEndpointsApiExplorer();
 		services.AddSwaggerGen();
 
+		//добавляет контекст базы данных, который будет использоваться методами API для добавления/извлечения из базы данных
 		services.AddDbContext<MainDbContext>(
 			options =>
 			{
@@ -144,7 +148,7 @@ public static class StartupExtensions
 					};
 			});
 
-		services.AddScoped<MainDbContext>();
+		//services.AddScoped<MainDbContext>();
 
 		services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 			.AddCookie();
@@ -152,9 +156,15 @@ public static class StartupExtensions
 		services.AddAuthorization();
 		services.AddManualAuthorization();
 
+		//добавление автоматического конвертировщика моделей в сервисы из AppMappingProfile.cs
 		services.AddAutoMapper(typeof(AppMappingProfile));
 	}
 
+	/// <summary>
+	/// Добавляет в базу данных роли пользователей, которые нужны для функционирования сервера, если их нет.
+	/// </summary>
+	/// <param name="serviceProvider"></param>
+	/// <exception cref="Exception"></exception>
 	private static async Task SynchronizeIdentityRoles(this IServiceProvider serviceProvider)
 	{
 		using var scope = serviceProvider.CreateScope();

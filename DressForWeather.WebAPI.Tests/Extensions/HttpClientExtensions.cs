@@ -59,9 +59,9 @@ public static class HttpClientExtensions
 		httpClient.DefaultRequestHeaders.Remove("Set-Cookie");
 	}
 
-	public static async Task<Tuple<InputClotchParameterPair, long>> AddRandomPair(this HttpClient httpClient)
+	public static async Task<Tuple<InputClothParameterPair, long>> AddRandomPair(this HttpClient httpClient)
 	{
-		var input = new InputClotchParameterPair
+		var input = new InputClothParameterPair
 			{Key = Random.Shared.NextInt64().ToString(), Value = Random.Shared.NextInt64().ToString()};
 
 		using var responseFromAdd = await httpClient.PostAsJsonAsync("/ClotchParameterPair",
@@ -74,12 +74,12 @@ public static class HttpClientExtensions
 		return Tuple.Create(input, addedId.Value);
 	}
 
-	public static async Task<Tuple<InputClotch, long>> AddRandomClotch(this HttpClient httpClient)
+	public static async Task<Tuple<InputCloth, long>> AddRandomClotch(this HttpClient httpClient)
 	{
 		var inputPairs =
 			new[] {await httpClient.AddRandomPair(), await httpClient.AddRandomPair()};
 
-		var input = new InputClotch
+		var input = new InputCloth
 		{
 			ClotchParametersIds = inputPairs.Select(t => t.Item2),
 			Name = Random.Shared.NextInt64().ToString(),
